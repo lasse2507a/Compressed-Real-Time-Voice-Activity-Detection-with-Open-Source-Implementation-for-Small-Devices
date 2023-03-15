@@ -1,0 +1,5 @@
+tensorflow
+sounddevice
+numpy
+scipy
+matplotlib
