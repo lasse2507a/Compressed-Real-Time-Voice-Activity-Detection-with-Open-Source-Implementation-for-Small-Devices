@@ -1,5 +1,4 @@
 import numpy as np
-import time
 
 def main():
     print(np.abs(-5))
