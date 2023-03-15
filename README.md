@@ -1,10 +1,11 @@
 # P6-VAD
 ## Docker
-You can build the Docker image using the following command:
-'''
+Build the Docker image locally using the following command:
+```
 docker build -t p6-vad-image .
-'''
-And then run the Docker container using the following command:
-'''
+```
+Run the Docker container using the following command:
+```
 docker run --name p6-vad-container -d -v ${pwd}:/code p6-vad-image sleep infinity
-'''
+```
+In VSCODE using the extension Dev Containers attach the running container to start a dev environment.
