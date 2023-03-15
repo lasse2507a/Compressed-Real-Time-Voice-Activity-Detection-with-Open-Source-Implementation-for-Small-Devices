@@ -3,8 +3,8 @@ FROM python:3.9
 WORKDIR /code
 
 COPY requirements.txt .
-RUN pip install --no-cache-dir --trusted-host pypi.python.org -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
-COPY ./src ./src
+COPY . .
 
 CMD ["python", "./src/main.py"]
