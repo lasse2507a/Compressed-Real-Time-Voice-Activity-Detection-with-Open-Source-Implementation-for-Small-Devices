@@ -2,7 +2,7 @@
 ## Docker
 Build the Docker image locally using the following command:
 ```
-docker build -t p6-vad-image .
+docker build -t p6-vad:1.x.x(version) .
 ```
 Run the Docker container using the following command:
 ```

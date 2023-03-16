@@ -14,3 +14,4 @@ if __name__ == '__main__':
                                        recording_queue))
 
     thread_record_audio.start()
+    
