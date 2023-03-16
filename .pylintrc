@@ -1,7 +1,7 @@
 [MASTER]
 disable=
     C0111, #missing-docstring
-#    C0103, #variable names can be 1 long (issues with having variables on 1 character)
+    C0103, #variable names can be 1 long (issues with having variables on 1 character)
     E0015, #no unrecognized option found (issues with start)
 
 [MAIN]
