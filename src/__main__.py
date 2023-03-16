@@ -10,12 +10,8 @@ stop = False
 
 
 if __name__ == '__main__':
-    thread_record_audio = Thread(target=record_audio,
-                                 daemon=True,
-                                 args=(RECORDING_SIZE,
-                                       F_SAMPLING,
-                                       recording_queue,
-                                       stop))
+    thread_record_audio = Thread(target=record_audio, daemon=True,
+                                 args=(RECORDING_SIZE, F_SAMPLING, recording_queue, stop))
 
     thread_record_audio.start()
 
