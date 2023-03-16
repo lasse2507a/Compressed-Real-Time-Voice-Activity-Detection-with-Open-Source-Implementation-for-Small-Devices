@@ -1,11 +1,16 @@
-import numpy as np
+from threading import Thread
+from queue import Queue
 
+from audio_collection import record_audio
 
-def main():
-    print(np.abs(-5))
-    print(np.abs(-10))
-    print("Hej")
-
+F_SAMPLING = 16000
+RECORDING_SIZE = 1000
+recording_queue = Queue()
 
 if __name__ == '__main__':
-    main()
+    thread_record_audio = Thread(target=record_audio,
+                                 args=(RECORDING_SIZE,
+                                       F_SAMPLING,
+                                       recording_queue))
+
+    thread_record_audio.start()
