@@ -1,10 +1,11 @@
 from threading import Thread
 from queue import Queue
+import time
 
 from audio_collection import record_audio
 
-F_SAMPLING = 16000
-RECORDING_SIZE = 1000
+F_SAMPLING = 44100
+RECORDING_SIZE = 4000
 
 def main():
     recording_queue = Queue()
@@ -14,8 +15,9 @@ def main():
 
     thread_record_audio.start()
 
-    input()
+    time.sleep(1)
     stop = True
+    print(recording_queue.qsize())
 
 if __name__ == '__main__':
     main()
