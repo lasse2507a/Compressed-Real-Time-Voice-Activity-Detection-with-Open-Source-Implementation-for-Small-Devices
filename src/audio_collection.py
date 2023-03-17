@@ -9,3 +9,4 @@ def record_audio(recording_size, sampling_frequency, recording_queue, stop):
                         channels = 1,
                         blocking = False,
                         dtype = np.float32))
+    print("Recording stopped")
