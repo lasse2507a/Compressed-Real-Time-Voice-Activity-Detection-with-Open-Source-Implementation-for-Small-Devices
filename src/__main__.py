@@ -18,6 +18,7 @@ def main():
     thread_record_audio.join()
 
     print(recordings.qsize())
+    print(len(recordings.get()[0]))
 
 if __name__ == '__main__':
     main()

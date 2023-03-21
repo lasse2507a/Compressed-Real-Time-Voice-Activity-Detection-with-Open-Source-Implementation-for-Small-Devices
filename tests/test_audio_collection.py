@@ -4,6 +4,10 @@ import time
 import random
 from src import audio_collection
 
+'''
+
+'''
+
 def test_queue_size_of_record_audio():
     random_size = random.randint(1000, 2000)
     random_fs= random.randint(8000, 16000)
@@ -17,8 +21,11 @@ def test_queue_size_of_record_audio():
     thread_stop_event.set()
     test_thread.join()
 
-    assert test_queue.qsize() in range(int(random_fs/random_size - 2), int(random_fs/random_size + 2))
-
+    test_queue_size = 0
+    while not test_queue.empty():
+        test_queue.get()
+        test_queue_size = test_queue_size + 1
+    assert test_queue_size in range(int(random_fs/random_size - 2), int(random_fs/random_size + 2))
 
 def test_blocksize_of_record_audio():
     random_size = random.randint(1000, 2000)
@@ -33,6 +40,5 @@ def test_blocksize_of_record_audio():
     thread_stop_event.set()
     test_thread.join()
 
-
-    while not test_queue.qsize() == 0:
+    while not test_queue.empty():
         assert len(test_queue.get()[0]) == random_size
