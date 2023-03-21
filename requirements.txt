@@ -3,3 +3,5 @@ sounddevice
 numpy
 scipy
 matplotlib
+pytest
+pylint

@@ -1,19 +1,24 @@
-from threading import Thread
+import threading
+import time
 from queue import Queue
-
 from audio_collection import record_audio
 
+BLOCKSIZE = 200
 F_SAMPLING = 16000
-RECORDING_SIZE = 1000
-recording_queue = Queue()
-stop = False
 
-
-if __name__ == '__main__':
-    thread_record_audio = Thread(target=record_audio, daemon=True,
-                                 args=(RECORDING_SIZE, F_SAMPLING, recording_queue, stop))
+def main():
+    recordings = Queue()
+    thread_stop_event = threading.Event()
+    thread_record_audio = threading.Thread(target=record_audio, daemon=True, args=(F_SAMPLING, BLOCKSIZE, recordings, thread_stop_event))
 
     thread_record_audio.start()
 
-    input()
-    stop = True
+    time.sleep(5)
+    thread_stop_event.set()
+    thread_record_audio.join()
+
+    print(recordings.qsize())
+    print(len(recordings.get()[0]))
+
+if __name__ == '__main__':
+    main()

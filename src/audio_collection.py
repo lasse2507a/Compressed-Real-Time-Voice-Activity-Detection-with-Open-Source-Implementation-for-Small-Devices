@@ -1,11 +1,12 @@
 import sounddevice as sd
 import numpy as np
 
-def record_audio(recording_size, sampling_frequency, recording_queue, stop):
+def record_audio(samplerate, blocksize, recordings, thread_stop_event):
     print("Audio recording started")
-    while not stop:
-        recording_queue.put(sd.rec(recording_size,
-                        samplerate = sampling_frequency,
-                        channels = 1,
-                        blocking = False,
-                        dtype = np.float32))
+    input_stream = sd.InputStream(samplerate=samplerate, blocksize=blocksize, channels=1, dtype=np.float32)
+    input_stream.start()
+    while not thread_stop_event.is_set():
+        recordings.put(input_stream.read(frames=blocksize))
+    if thread_stop_event.is_set():
+        input_stream.abort()
+    print("Recording stopped")
