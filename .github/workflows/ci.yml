@@ -26,8 +26,4 @@ jobs:
         continue-on-error: true
       - name: Test with pytest
         run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
-          sudo apt-get install libasound-dev libportaudio2 libportaudiocpp0 portaudio19-dev -y
-          pip install flake8 pytest
-          pytest
+          pytest -r tests
