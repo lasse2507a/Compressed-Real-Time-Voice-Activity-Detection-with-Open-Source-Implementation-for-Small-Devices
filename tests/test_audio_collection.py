@@ -2,7 +2,6 @@ from queue import Queue
 import threading
 import time
 import random
-import sounddevice as sd
 from src import audio_collection
 
 def test_queue_size_of_record_audio():
@@ -34,5 +33,6 @@ def test_blocksize_of_record_audio():
     thread_stop_event.set()
     test_thread.join()
 
-    for i in range(int(random_fs/random_size - 2)):
+
+    while not test_queue.qsize() == 0:
         assert len(test_queue.get()[0]) == random_size
