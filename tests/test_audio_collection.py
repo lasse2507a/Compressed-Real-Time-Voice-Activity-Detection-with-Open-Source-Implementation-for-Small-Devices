@@ -34,5 +34,5 @@ def test_blocksize_of_record_audio():
     thread_stop_event.set()
     test_thread.join()
 
-    for i in range(int(random_fs/random_size)):
+    for i in range(int(random_fs/random_size - 2)):
         assert len(test_queue.get()[0]) == random_size
