@@ -1,5 +1,5 @@
-from threading import Thread
 from queue import Queue
+import threading
 import time
 import random
 import sounddevice as sd
@@ -9,29 +9,30 @@ def test_queue_size_of_record_audio():
     random_size = random.randint(1000, 2000)
     random_fs= random.randint(8000, 16000)
     test_queue = Queue()
-    stop = False
+    thread_stop_event = threading.Event()
 
-    test_thread1 = Thread(target=audio_collection.record_audio, daemon=True,
-                                 args=(random_size, random_fs, test_queue, stop))
-    test_thread1.start()
+    test_thread = threading.Thread(target=audio_collection.record_audio, daemon=True,
+                                 args=(random_fs, random_size, test_queue, thread_stop_event))
+    test_thread.start()
     time.sleep(1)
-    stop = True
-    sd.stop()
+    thread_stop_event.set()
+    test_thread.join()
 
-    assert test_queue.qsize()*random_size >= random_fs and test_queue.qsize()*random_size <= random_fs + random_size
+    assert test_queue.qsize() in range(int(random_fs/random_size - 2), int(random_fs/random_size + 2))
 
 
-def test_recording_size_of_record_audio():
+def test_blocksize_of_record_audio():
     random_size = random.randint(1000, 2000)
     random_fs= random.randint(8000, 16000)
     test_queue = Queue()
-    test_queue.maxsize = 200
-    stop = False
+    thread_stop_event = threading.Event()
 
-    test_thread2 = Thread(target=audio_collection.record_audio, daemon=True,
-                                 args=(random_size, random_fs, test_queue, stop))
-    test_thread2.start()
+    test_thread = threading.Thread(target=audio_collection.record_audio, daemon=True,
+                                 args=(random_fs, random_size, test_queue, thread_stop_event))
+    test_thread.start()
     time.sleep(1)
-    stop = True
+    thread_stop_event.set()
+    test_thread.join()
 
-    assert len(test_queue.get()) == random_size
+    for i in range(int(random_fs/random_size)):
+        assert len(test_queue.get()[0]) == random_size
