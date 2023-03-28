@@ -1,6 +1,8 @@
 import threading
 import time
 from queue import Queue
+import matplotlib.pyplot as plt
+import librosa
 from audio_collection import record_audio
 from preprocessing_mfsc import preprocessing_mfsc
 
@@ -17,12 +19,12 @@ def main():
     thread_record_audio.start()
     thread_preprocessing_mfsc.start()
 
-    time.sleep(5)
+    time.sleep(3)
     thread_stop_event.set()
     thread_record_audio.join()
+    thread_preprocessing_mfsc.join()
 
-    print(recordings.qsize())
-    print(len(recordings.get()[0]))
+    plt.show()
 
 if __name__ == '__main__':
     main()
