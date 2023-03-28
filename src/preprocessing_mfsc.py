@@ -1,4 +1,5 @@
 import librosa
+import numpy as np
 
 def preprocessing_mfsc(samplerate, blocksize, recordings, melspecs, thread_stop_event):
     print("MFSC preprocessing started")
