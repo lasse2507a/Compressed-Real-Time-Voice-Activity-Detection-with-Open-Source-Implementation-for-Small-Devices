@@ -1,7 +1,7 @@
 tensorflow
 sounddevice
 numpy
-scipy
+librosa
 matplotlib
 pytest
 pylint
