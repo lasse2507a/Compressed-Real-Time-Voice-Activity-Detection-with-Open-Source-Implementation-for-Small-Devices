@@ -5,10 +5,12 @@ def preprocessing_mfsc(samplerate, blocksize, recordings, melspecs, thread_stop_
     while not thread_stop_event.is_set():
         melspecs.put(librosa.feature.melspectrogram(y=recordings.get(),
                                                     sr=samplerate,
-                                                    S=None,
                                                     n_fft=blocksize,
                                                     hop_length=blocksize,
                                                     window='hann',
-                                                    center=False,
-                                                    power=1.0))
+                                                    center=True,
+                                                    power=1.0,
+                                                    n_mels=64,
+                                                    fmin=300,
+                                                    fmax=8000))
     print("MFSC preprocessing stopped")
