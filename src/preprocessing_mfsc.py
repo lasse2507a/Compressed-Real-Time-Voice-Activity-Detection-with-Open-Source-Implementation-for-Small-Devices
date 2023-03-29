@@ -9,15 +9,11 @@ def preprocessing_mfsc(samplerate, blocksize, recordings, melspecs, thread_stop_
     first_round = True
     while not thread_stop_event.is_set():
         recording = recordings.get()
-        print(np.shape(recording))
         recording_copy = np.copy(recording)
         previous_half.put(recording_copy[int(blocksize/2):])
         if not first_round:
             signal = np.concatenate((previous_half.get(), recording))
-            print(np.shape(signal))
-
-            signal_test = np.sin(np.pi * 500 * np.linspace(0, blocksize/samplerate, 384))
-            melspecs.put(librosa.feature.melspectrogram(y=signal_test,
+            melspecs.put(librosa.feature.melspectrogram(y=signal,
                                                         sr=samplerate,
                                                         n_fft=int(blocksize*1.5),
                                                         hop_length=int(blocksize*1.5),
