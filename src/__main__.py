@@ -27,13 +27,25 @@ def main():
     thread_record_audio.join()
     thread_preprocessing_mfsc.join()
 
-    print(melspecs.qsize())
-    print(len(melspecs.get()[0]))
-
     plt.figure(figsize=(10, 4))
-    librosa.display.specshow(librosa.power_to_db(melspecs.get()[0], ref=np.max), sr=F_SAMPLING, x_axis='time', y_axis='mel')
+    librosa.display.specshow(librosa.power_to_db(melspecs.get(), ref=np.max), sr=F_SAMPLING, x_axis='time', y_axis='mel')
     plt.title('Mel spectrogram')
     plt.show()
 
+def frequency_test():
+    t = np.linspace(0, BLOCKSIZE/F_SAMPLING, BLOCKSIZE)
+    signal1 = np.sin(2*np.pi * 500 * t) * 5
+    signal2 = np.sin(2*np.pi * 7000 * t)
+
+    signal = signal1 + signal2
+    signal_fft = np.fft.fft(signal)
+
+    plt.subplot(2, 1, 1)
+    plt.plot(t, signal)
+    plt.subplot(2, 1, 2)
+    plt.plot(np.linspace(0, F_SAMPLING/2, int(BLOCKSIZE/2)), abs(signal_fft)[:int(BLOCKSIZE/2)])
+    plt.show()
+
+
 if __name__ == '__main__':
-    main()
+    frequency_test()
