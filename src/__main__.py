@@ -1,9 +1,11 @@
 import threading
 import time
 from queue import Queue
-import matplotlib.pyplot as plt
+
 import librosa
+import matplotlib.pyplot as plt
 import numpy as np
+
 from audio_collection import record_audio
 from preprocessing_mfsc import preprocessing_mfsc
 
@@ -20,13 +22,16 @@ def main():
     thread_record_audio.start()
     thread_preprocessing_mfsc.start()
 
-    time.sleep(1)
+    time.sleep(3)
     thread_stop_event.set()
     thread_record_audio.join()
     thread_preprocessing_mfsc.join()
 
+    print(melspecs.qsize())
+    print(len(melspecs.get()[0]))
+
     plt.figure(figsize=(10, 4))
-    librosa.display.specshow(librosa.power_to_db(melspecs.get(), ref=np.max), sr=F_SAMPLING, x_axis='time', y_axis='mel')
+    librosa.display.specshow(librosa.power_to_db(melspecs.get()[0], ref=np.max), sr=F_SAMPLING, x_axis='time', y_axis='mel')
     plt.title('Mel spectrogram')
     plt.show()
 
