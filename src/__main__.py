@@ -9,8 +9,8 @@ import numpy as np
 from audio_collection import record_audio
 from preprocessing_mfsc import preprocessing_mfsc
 
-BLOCKSIZE = 2000
-F_SAMPLING = 16000
+BLOCKSIZE = 256
+F_SAMPLING = 16384
 
 def main():
     recordings = Queue()
