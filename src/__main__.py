@@ -9,10 +9,10 @@ import numpy as np
 from audio_collection import record_audio
 from preprocessing_mfsc import preprocessing_mfsc
 
-BLOCKSIZE = 256
-F_SAMPLING = 16384
+BLOCKSIZE = 128
+F_SAMPLING = 48000
 
-def main():
+def real_time_implementation():
     recordings = Queue()
     melspecs = Queue()
     thread_stop_event = threading.Event()
@@ -46,6 +46,6 @@ def frequency_test():
     plt.plot(np.linspace(0, F_SAMPLING/2, int(BLOCKSIZE/2)), abs(signal_fft)[:int(BLOCKSIZE/2)])
     plt.show()
 
-
 if __name__ == '__main__':
-    frequency_test()
+    #frequency_test()
+    real_time_implementation()
