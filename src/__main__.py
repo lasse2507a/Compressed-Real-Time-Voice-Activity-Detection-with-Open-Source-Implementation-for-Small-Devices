@@ -6,10 +6,11 @@ import librosa
 import matplotlib.pyplot as plt
 import numpy as np
 
+from sine_wave_generator import SineWaveGenerator
 from audio_collection import record_audio
 from preprocessing_mfsc import preprocessing_mfsc
 
-BLOCKSIZE = 128
+BLOCKSIZE = 1000
 F_SAMPLING = 48000
 
 def real_time_implementation():
@@ -33,19 +34,18 @@ def real_time_implementation():
     plt.show()
 
 def frequency_test():
-    t = np.linspace(0, BLOCKSIZE/F_SAMPLING, BLOCKSIZE)
-    signal1 = np.sin(2*np.pi * 500 * t) * 5
-    signal2 = np.sin(2*np.pi * 7000 * t)
-
-    signal = signal1 + signal2
+    t = SineWaveGenerator(BLOCKSIZE, F_SAMPLING).time()
+    f = SineWaveGenerator(BLOCKSIZE, F_SAMPLING).frequency()
+    signal = SineWaveGenerator(BLOCKSIZE, F_SAMPLING).five_sine_wave()
     signal_fft = np.fft.fft(signal)
 
+    plt.figure(figsize=(16,9))
     plt.subplot(2, 1, 1)
     plt.plot(t, signal)
     plt.subplot(2, 1, 2)
-    plt.plot(np.linspace(0, F_SAMPLING/2, int(BLOCKSIZE/2)), abs(signal_fft)[:int(BLOCKSIZE/2)])
+    plt.plot(f, abs(signal_fft)[:int(BLOCKSIZE/2)])
     plt.show()
 
 if __name__ == '__main__':
-    #frequency_test()
-    real_time_implementation()
+    frequency_test()
+    #real_time_implementation()
