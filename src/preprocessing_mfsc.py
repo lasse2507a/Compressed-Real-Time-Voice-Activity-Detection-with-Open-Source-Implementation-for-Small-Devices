@@ -26,3 +26,8 @@ def preprocessing_mfsc(samplerate, blocksize, recordings, melspecs, thread_stop_
         else:
             first_round = False
     print("MFSC preprocessing stopped")
+
+    #plt.figure(figsize=(10, 4))
+    #librosa.display.specshow(librosa.power_to_db(melspecs.get(), ref=np.max), sr=F_SAMPLING, x_axis='time', y_axis='mel')
+    #plt.title('Mel spectrogram')
+    #plt.show()
