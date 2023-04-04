@@ -9,7 +9,7 @@ class AudioRecorder:
         self.blocksize = blocksize
         self.recordings = Queue()
         self.thread_stop_event = threading.Event()
-        self.input_stream = sd.InputStream(samplerate=self.samplerate, blocksize=self.blocksize, channels=1, dtype=np.float32)
+        self.input_stream = sd.InputStream(samplerate=self.samplerate, blocksize=self.blocksize, channels=1, dtype=np.int16)
 
     def start_recording(self):
         print("Audio recording started")

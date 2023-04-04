@@ -1,6 +1,6 @@
 from queue import Queue
 import threading
-import librosa
+import scipy.signal as sp
 import numpy as np
 
 class MFSCPreprocessor:
@@ -20,36 +20,16 @@ class MFSCPreprocessor:
             recording_copy = np.copy(recording)
             self.previous_half.put(recording_copy[int(self.blocksize/2):])
             if not self.first_round:
-                overlapped_recording = np.concatenate((self.previous_half.get(), recording))
-                self.melspecs.put(librosa.feature.melspectrogram(y=overlapped_recording,
-                                                    sr=self.samplerate,
-                                                    n_fft=int(self.blocksize*1.5),
-                                                    hop_length=int(self.blocksize*1.5/2),
-                                                    window='hann',
-                                                    center=True,
-                                                    power=2.0,
-                                                    n_mels=64,
-                                                    fmin=300,
-                                                    fmax=8000))
+                overlap_recording = np.concatenate((self.previous_half.get(), recording))
+                filtered_overlap_recording = np.convolve(overlap_recording,
+                                                         sp.firwin(numtaps = 32+1, cutoff = [300, 8000], window = 'hamming', pass_zero = False, fs = self.samplerate),
+                                                         mode = "same")
+                self.melspecs.put(filtered_overlap_recording)
             self.first_round = False
             if self.melspecs.full():
                 print("MFSC preprocessing queue full")
+                self.thread_stop_event.set()
 
     def stop_preprocessing(self):
         self.thread_stop_event.set()
         print("MFSC preprocessing stopped")
-
-'''
-if not self.first_round:
-                overlapped_recording = np.concatenate((self.previous_half.get(), recording))
-                self.melspecs.put(librosa.feature.melspectrogram(y=overlapped_recording,
-                                                    sr=self.samplerate,
-                                                    n_fft=int(self.blocksize*1.5),
-                                                    hop_length=int(self.blocksize*1.5/2),
-                                                    window='hann',
-                                                    center=True,
-                                                    power=2.0,
-                                                    n_mels=64,
-                                                    fmin=300,
-                                                    fmax=8000))
-'''
