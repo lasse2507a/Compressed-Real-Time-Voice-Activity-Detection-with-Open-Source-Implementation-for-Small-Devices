@@ -8,7 +8,7 @@ from audio_recorder import AudioRecorder
 from preprocessing_mfsc import MFSCPreprocessor
 
 F_SAMPLING = 48000
-BLOCKSIZE = 48000
+BLOCKSIZE = 512
 
 def real_time_implementation():
     recorder = AudioRecorder(F_SAMPLING, BLOCKSIZE)
@@ -41,7 +41,7 @@ def real_time_implementation():
 def frequency_test():
     t = SineWaveGenerator(BLOCKSIZE, F_SAMPLING).time()
     f = SineWaveGenerator(BLOCKSIZE, F_SAMPLING).frequency()
-    signal = SineWaveGenerator(BLOCKSIZE, F_SAMPLING).five_sine_wave(freq4 = 15000)
+    signal = SineWaveGenerator(BLOCKSIZE, F_SAMPLING).five_sine_wave(freq4 = 8500)
     signal = np.convolve(signal, sp.firwin(numtaps = 32+1, cutoff = [300, 8000], window = 'hamming', pass_zero = False, fs = F_SAMPLING), mode = "same")
     signal_fft = np.abs(np.fft.fft(signal))[:int(BLOCKSIZE/2)]
 
