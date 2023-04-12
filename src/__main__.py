@@ -5,14 +5,14 @@ import numpy as np
 import scipy.signal as sp
 from sine_wave_generator import SineWaveGenerator
 from audio_recorder import AudioRecorder
-from preprocessing_mfsc import MFSCPreprocessor
+from real_time_mfsc_preprocessing import RealTimeMFSCPreprocessor
 
 F_SAMPLING = 48000
 BLOCKSIZE = 512
 
 def real_time_implementation():
     recorder = AudioRecorder(F_SAMPLING, BLOCKSIZE)
-    preprocessor = MFSCPreprocessor(F_SAMPLING, BLOCKSIZE)
+    preprocessor = RealTimeMFSCPreprocessor(F_SAMPLING, BLOCKSIZE)
 
     thread_recorder = threading.Thread(target=recorder.start_recording, daemon=True)
     thread_preprocessor = threading.Thread(target=preprocessor.start_preprocessing, args=(recorder.recordings,), daemon=True)
@@ -27,7 +27,7 @@ def real_time_implementation():
     thread_recorder.join()
     thread_preprocessor.join()
 
-    f = SineWaveGenerator(int(BLOCKSIZE*1.5), F_SAMPLING).frequency()
+    f = SineWaveGenerator(int(BLOCKSIZE), F_SAMPLING).frequency()
     signal = preprocessor.melspecs.get()
     plt.figure(figsize=(16,9))
     plt.plot(f, signal, ".-")
