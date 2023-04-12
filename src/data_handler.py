@@ -1,6 +1,5 @@
 import csv
 import os
-import numpy as np
 
 class DataHandler:
     def __init__(self, samplerate):
@@ -12,7 +11,7 @@ class DataHandler:
         self.indices = []
 
     def load_csv(self, path = 'data\\data_test.csv'):
-        with open(path) as csvfile:
+        with open(path, encoding="utf-8") as csvfile:
             csv_reader = csv.reader(csvfile, delimiter = ',')
             for row in csv_reader:
                 self.names.append(row[0])
@@ -20,19 +19,19 @@ class DataHandler:
                 self.end_times.append(float(row[2]))
                 self.labels.append(int(row[3]))
 
-    def create_data(self, size = 48000, make_test_data = True):
+    def create_data(self, size = 48000):
         for i in self.start_times:
             if (self.end_times[i] - self.start_times[i]) * self.samplerate > size:
                 self.indices.append(i)
 
-        if make_test_data:
-            os.makedirs("data\\training_data")
-            os.makedirs("data\\test_data")
-        else:
-            os.makedirs("data\\training_data")
+        os.makedirs("data\\training_data")
+        os.makedirs("data\\test_data")
 
         for file in os.listdir('data\\audio'):
-            open(file, 'r')
+            current_file = open(file, 'r', encoding="utf-8")
+            for index in self.indices:
+                if current_file.name == self.names[index]:
+                    
 
 
 
