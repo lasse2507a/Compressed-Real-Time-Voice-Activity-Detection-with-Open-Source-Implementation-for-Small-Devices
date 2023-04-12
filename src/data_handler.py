@@ -1,5 +1,6 @@
 import csv
 import os
+import scipy.io.wavfile as wavfile
 
 class DataHandler:
     def __init__(self, samplerate):
@@ -11,7 +12,7 @@ class DataHandler:
         self.indices = []
 
     def load_csv(self, path = 'data\\data_test.csv'):
-        with open(path, encoding="utf-8") as csvfile:
+        with open(path, encoding = "utf-8") as csvfile:
             csv_reader = csv.reader(csvfile, delimiter = ',')
             for row in csv_reader:
                 self.names.append(row[0])
@@ -28,14 +29,15 @@ class DataHandler:
         os.makedirs("data\\test_data")
 
         for file in os.listdir('data\\audio'):
-            current_file = open(file, 'r', encoding="utf-8")
+            current_file = open(file, 'r', encoding = "utf-8")
             for index in self.indices:
                 if current_file.name == self.names[index]:
-                    
-
-
-
-
+                    begin = self.start_times[index] * self.samplerate
+                    end = self.start_times[index] * self.samplerate + size
+                    if index % 2 == 0:
+                        wavfile.write(f"data\\training_data\\{index}_{current_file.name}_training", self.samplerate, current_file[begin:end])
+                    else:
+                        wavfile.write(f"data\\test_data\\{index}_{current_file.name}_test", self.samplerate, current_file[begin:end])
 
 datahandler = DataHandler(16000)
 datahandler.load_csv()
