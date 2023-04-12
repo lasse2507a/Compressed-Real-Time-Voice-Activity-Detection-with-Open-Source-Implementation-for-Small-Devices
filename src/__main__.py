@@ -20,22 +20,17 @@ def real_time_implementation():
     thread_recorder.start()
     thread_preprocessor.start()
 
-    time.sleep(2)
+    time.sleep(1)
 
     recorder.stop_recording()
     preprocessor.stop_preprocessing()
     thread_recorder.join()
     thread_preprocessor.join()
 
-    t = SineWaveGenerator(int(BLOCKSIZE*1.5), F_SAMPLING).time()
     f = SineWaveGenerator(int(BLOCKSIZE*1.5), F_SAMPLING).frequency()
     signal = preprocessor.melspecs.get()
-    signal_fft = np.abs(np.fft.fft(signal))[:int(BLOCKSIZE*1.5/2)]
     plt.figure(figsize=(16,9))
-    plt.subplot(2, 1, 1)
-    plt.plot(t, signal, ".-")
-    plt.subplot(2, 1, 2)
-    plt.plot(f, signal_fft, ".-")
+    plt.plot(f, signal, ".-")
     plt.show()
 
 def frequency_test():
@@ -53,5 +48,5 @@ def frequency_test():
     plt.show()
 
 if __name__ == '__main__':
-    frequency_test()
-    #real_time_implementation()
+    #frequency_test()
+    real_time_implementation()
