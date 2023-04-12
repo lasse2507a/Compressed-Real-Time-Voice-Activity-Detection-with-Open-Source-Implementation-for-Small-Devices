@@ -2,11 +2,7 @@ from queue import Queue
 import threading
 import time
 import random
-from src import audio_collection
-
-'''
-
-'''
+import audio_recorder
 
 def test_queue_size_of_record_audio():
     random_size = random.randint(1000, 2000)

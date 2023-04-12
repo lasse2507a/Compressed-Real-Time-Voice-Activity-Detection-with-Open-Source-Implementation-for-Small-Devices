@@ -1,9 +1,10 @@
 from queue import Queue
 import threading
+import librosa
 import scipy.signal as sp
 import numpy as np
 
-class MFSCPreprocessor:
+class RealTimeMFSCPreprocessor:
     def __init__(self, samplerate, blocksize):
         self.samplerate = samplerate
         self.blocksize = blocksize
@@ -21,8 +22,10 @@ class MFSCPreprocessor:
             self.previous_half.put(recording_copy[int(self.blocksize/2):])
             if not self.first_round:
                 overlapped_recording = np.concatenate((self.previous_half.get(), recording))
-                filtered_overlapped_recording = np.convolve(overlapped_recording, sp.firwin(numtaps = 64+1, cutoff = [300, 8000], window = 'hamming', pass_zero = 'bandpass', fs = self.samplerate), mode = "same")
-                fft_overlapped_recording = np.abs(np.fft.fft(filtered_overlapped_recording))[:int(self.blocksize*1.5/2)]
+                filtered_recording = np.convolve(overlapped_recording, sp.firwin(numtaps = 64+1, cutoff = [300, 8000], window = 'hamming', pass_zero = 'bandpass', fs = self.samplerate), mode = "same")
+                downsampled_recording = filtered_recording[::3]
+                fft_overlapped_recording = np.abs(np.fft.fft(downsampled_recording))[:int(len(filtered_recording)/2)]
+                librosa.filters.mel(sr = self.samplerate, n_fft = 256, n_mels = 64, fmin = 300, fmax = 8000)
                 self.melspecs.put(fft_overlapped_recording)
             self.first_round = False
             if self.melspecs.full():
