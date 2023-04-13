@@ -22,30 +22,28 @@ class DataHandler:
                 self.end_times.append(float(row[2]))
                 self.labels.append(int(row[3]))
 
-    def create_data(self, size = 48000):
+    def create_data(self, size = 44100*3):
         for k in range(len(self.start_times)):
             if (self.end_times[k] - self.start_times[k]) * self.samplerate >= size:
                 self.indices_correct_size.append(k)
+        print(len(self.indices_correct_size))
 
         os.makedirs(f"data\\training_data_{size}", exist_ok = True)
         os.makedirs(f"data\\test_data_{size}", exist_ok = True)
 
         for file in os.listdir('data\\audio'):
-            with open(file, 'r', encoding = "utf-8") as current_file:
-                for i in self.indices_correct_size:
-                    if self.names[i] == current_file.name:
+            audio_file_path = os.path.join('data\\audio', file)
+            with open(audio_file_path, 'r', encoding = "utf-8") as current_file:
+                for i in range(len(self.indices_correct_size)):
+                    if 'data\\audio\\' + self.names[i] + '.wav' == current_file.name:
                         self.indices_current_file.append(self.indices_correct_size[i])
                         self.is_same_file = True
                     elif self.is_same_file:
                         break
-                for j in self.indices_current_file:
+                for j in range(len(self.indices_current_file)):
                     begin = self.start_times[j] * self.samplerate
                     end = self.start_times[j] * self.samplerate + size
                     if j % 2 == 0:
                         wavfile.write(f"data\\training_data_{size}\\{j}_{current_file.name}_training_{size}", self.samplerate, current_file[begin:end])
                     else:
                         wavfile.write(f"data\\test_data_{size}\\{j}_{current_file.name}_test_{size}", self.samplerate, current_file[begin:end])
-
-datahandler = DataHandler(44100)
-datahandler.load_csv()
-datahandler.create_data()

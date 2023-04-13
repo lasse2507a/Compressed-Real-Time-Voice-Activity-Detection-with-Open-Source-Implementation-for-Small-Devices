@@ -3,12 +3,18 @@ import time
 import matplotlib.pyplot as plt
 import numpy as np
 import scipy.signal as sp
+from data_handler import DataHandler
 from sine_wave_generator import SineWaveGenerator
 from audio_recorder import AudioRecorder
 from real_time_mfsc_preprocessing import RealTimeMFSCPreprocessor
 
 F_SAMPLING = 48000
 BLOCKSIZE = 512
+
+def data_generation():
+    datahandler = DataHandler(44100)
+    datahandler.load_csv()
+    datahandler.create_data()
 
 def real_time_implementation():
     recorder = AudioRecorder(F_SAMPLING, BLOCKSIZE)
@@ -48,5 +54,6 @@ def frequency_test():
     plt.show()
 
 if __name__ == '__main__':
+    data_generation()
     #frequency_test()
-    real_time_implementation()
+    #real_time_implementation()
