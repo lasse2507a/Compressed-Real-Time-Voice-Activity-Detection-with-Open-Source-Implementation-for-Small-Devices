@@ -129,4 +129,5 @@ dmypy.json
 .pyre/
 
 # Data
-audio/
+input/
+output/

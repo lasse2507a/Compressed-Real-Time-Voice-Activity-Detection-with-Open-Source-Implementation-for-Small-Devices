@@ -1,5 +1,6 @@
 import csv
 import os
+import numpy as np
 import scipy.io.wavfile as wavfile
 
 class DataHandler:
@@ -28,22 +29,25 @@ class DataHandler:
                 self.indices_correct_size.append(k)
         print(len(self.indices_correct_size))
 
-        os.makedirs(f"data\\training_data_{size}", exist_ok = True)
-        os.makedirs(f"data\\test_data_{size}", exist_ok = True)
+        os.makedirs(f"data\\output\\training_data_{size}", exist_ok = True)
+        os.makedirs(f"data\\output\\test_data_{size}", exist_ok = True)
 
-        for file in os.listdir('data\\audio'):
-            audio_file_path = os.path.join('data\\audio', file)
-            with open(audio_file_path, 'r', encoding = "utf-8") as current_file:
-                for i in range(len(self.indices_correct_size)):
-                    if 'data\\audio\\' + self.names[i] + '.wav' == current_file.name:
-                        self.indices_current_file.append(self.indices_correct_size[i])
-                        self.is_same_file = True
-                    elif self.is_same_file:
-                        break
-                for j in range(len(self.indices_current_file)):
-                    begin = self.start_times[j] * self.samplerate
-                    end = self.start_times[j] * self.samplerate + size
-                    if j % 2 == 0:
-                        wavfile.write(f"data\\training_data_{size}\\{j}_{current_file.name}_training_{size}", self.samplerate, current_file[begin:end])
-                    else:
-                        wavfile.write(f"data\\test_data_{size}\\{j}_{current_file.name}_test_{size}", self.samplerate, current_file[begin:end])
+        for file in os.listdir('data\\input'):
+            current_file = wavfile.read(os.path.join('data\\input', file))
+            current_file = current_file[1]
+            for i in self.indices_correct_size:
+                if 'data\\input\\' + self.names[i] + '.wav' == os.path.join('data\\input', file):
+                    self.indices_current_file.append(i)
+                    self.is_same_file = True
+                elif self.is_same_file:
+                    break
+            for j in self.indices_current_file:
+                begin = self.start_times[j] * self.samplerate
+                end = self.start_times[j] * self.samplerate + size
+                audio_data_portion = current_file[int(begin):int(end)]
+                if j % 2 == 0:
+                    wavfile.write(f"data\\output\\training_data_{size}\\{j}_{self.names[j]}_training_{size}_{self.labels[j]}.wav",
+                                  self.samplerate, np.array(audio_data_portion, dtype=np.int16))
+                else:
+                    wavfile.write(f"data\\output\\test_data_{size}\\{j}_{self.names[j]}_test_{size}_{self.labels[j]}.wav",
+                                  self.samplerate, np.array(audio_data_portion, dtype=np.int16))
