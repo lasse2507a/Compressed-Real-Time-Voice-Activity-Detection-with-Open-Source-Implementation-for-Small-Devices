@@ -46,6 +46,6 @@ class DataHandler:
                     else:
                         wavfile.write(f"data\\test_data_{size}\\{j}_{current_file.name}_test_{size}", self.samplerate, current_file[begin:end])
 
-datahandler = DataHandler(16000)
+datahandler = DataHandler(44100)
 datahandler.load_csv()
 datahandler.create_data()
