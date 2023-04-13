@@ -22,6 +22,10 @@ class DataHandler:
                 self.start_times.append(float(row[1]))
                 self.end_times.append(float(row[2]))
                 self.labels.append(int(row[3]))
+            print(len(self.names))
+            print(len(self.start_times))
+            print(len(self.end_times))
+            print(len(self.labels))
 
     def create_data(self, size = 44100*3):
         for k in range(len(self.start_times)):
@@ -33,8 +37,8 @@ class DataHandler:
         os.makedirs(f"data\\output\\test_data_{size}", exist_ok = True)
 
         for file in os.listdir('data\\input'):
-            current_file = wavfile.read(os.path.join('data\\input', file))
-            current_file = current_file[1]
+            current_file = wavfile.read(os.path.join('data\\input', file))[1]
+            l = 0
             for i in self.indices_correct_size:
                 if 'data\\input\\' + self.names[i] + '.wav' == os.path.join('data\\input', file):
                     self.indices_current_file.append(i)
@@ -45,9 +49,10 @@ class DataHandler:
                 begin = self.start_times[j] * self.samplerate
                 end = self.start_times[j] * self.samplerate + size
                 audio_data_portion = current_file[int(begin):int(end)]
-                if j % 2 == 0:
-                    wavfile.write(f"data\\output\\training_data_{size}\\{j}_{self.names[j]}_training_{size}_{self.labels[j]}.wav",
+                l = l + 1
+                if l % 2 == 0:
+                    wavfile.write(f"data\\output\\training_data_size{size}\\{j}_{self.names[j]}_training_{size}_{self.labels[j]}.wav",
                                   self.samplerate, np.array(audio_data_portion, dtype=np.int16))
                 else:
-                    wavfile.write(f"data\\output\\test_data_{size}\\{j}_{self.names[j]}_test_{size}_{self.labels[j]}.wav",
+                    wavfile.write(f"data\\output\\test_data_size{size}\\{j}_{self.names[j]}_test_{size}_{self.labels[j]}.wav",
                                   self.samplerate, np.array(audio_data_portion, dtype=np.int16))
