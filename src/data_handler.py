@@ -27,8 +27,8 @@ class DataHandler:
             if (self.end_times[k] - self.start_times[k]) * self.samplerate >= size:
                 self.indices_correct_size.append(k)
 
-        os.makedirs(f"data\\training_data{size}", exist_ok = True)
-        os.makedirs(f"data\\test_data{size}", exist_ok = True)
+        os.makedirs(f"data\\training_data_{size}", exist_ok = True)
+        os.makedirs(f"data\\test_data_{size}", exist_ok = True)
 
         for file in os.listdir('data\\audio'):
             with open(file, 'r', encoding = "utf-8") as current_file:
@@ -42,9 +42,9 @@ class DataHandler:
                     begin = self.start_times[j] * self.samplerate
                     end = self.start_times[j] * self.samplerate + size
                     if j % 2 == 0:
-                        wavfile.write(f"data\\training_data{size}\\{j}_{current_file.name}_training", self.samplerate, current_file[begin:end])
+                        wavfile.write(f"data\\training_data_{size}\\{j}_{current_file.name}_training_{size}", self.samplerate, current_file[begin:end])
                     else:
-                        wavfile.write(f"data\\test_data{size}\\{j}_{current_file.name}_test", self.samplerate, current_file[begin:end])
+                        wavfile.write(f"data\\test_data_{size}\\{j}_{current_file.name}_test_{size}", self.samplerate, current_file[begin:end])
 
 datahandler = DataHandler(16000)
 datahandler.load_csv()
