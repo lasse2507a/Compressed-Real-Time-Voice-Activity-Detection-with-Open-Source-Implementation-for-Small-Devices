@@ -42,17 +42,18 @@ class DataHandler:
             for i in self.indices_correct_size:
                 if 'data\\input\\' + self.names[i] + '.wav' == os.path.join('data\\input', file):
                     self.indices_current_file.append(i)
-                    self.is_same_file = True
-                elif self.is_same_file:
-                    break
+                #    self.is_same_file = True
+                #elif self.is_same_file:
+                #    self.is_same_file = False
+                #    break
             for j in self.indices_current_file:
                 begin = self.start_times[j] * self.samplerate
                 end = self.start_times[j] * self.samplerate + size
                 audio_data_portion = current_file[int(begin):int(end)]
                 l = l + 1
                 if l % 2 == 0:
-                    wavfile.write(f"data\\output\\training_data_size{size}\\{j}_{self.names[j]}_training_{size}_{self.labels[j]}.wav",
+                    wavfile.write(f"data\\output\\training_data_{size}\\{j+1}_{self.names[j]}_training_{size}_{self.labels[j]}.wav",
                                   self.samplerate, np.array(audio_data_portion, dtype=np.int16))
                 else:
-                    wavfile.write(f"data\\output\\test_data_size{size}\\{j}_{self.names[j]}_test_{size}_{self.labels[j]}.wav",
+                    wavfile.write(f"data\\output\\test_data_{size}\\{j+1}_{self.names[j]}_test_{size}_{self.labels[j]}.wav",
                                   self.samplerate, np.array(audio_data_portion, dtype=np.int16))
