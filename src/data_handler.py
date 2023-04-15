@@ -28,8 +28,8 @@ class DataHandler:
             print(len(self.labels))
 
     def create_data(self, size = 44100*3):
-        for k in range(len(self.start_times)):
-            if (self.end_times[k] - self.start_times[k]) * self.samplerate >= size:
+        for k, start_time in enumerate(self.start_times):
+            if (self.end_times[k] - start_time) * self.samplerate >= size:
                 self.indices_correct_size.append(k)
         print(len(self.indices_correct_size))
 
@@ -57,3 +57,8 @@ class DataHandler:
                 else:
                     wavfile.write(f"data\\output\\test_data_{size}\\{j+1}_{self.names[j]}_test_{size}_{self.labels[j]}.wav",
                                   self.samplerate, np.array(audio_data_portion, dtype=np.int16))
+
+if __name__ == '__main__':
+    datahandler = DataHandler(44100)
+    datahandler.load_csv()
+    datahandler.create_data()
