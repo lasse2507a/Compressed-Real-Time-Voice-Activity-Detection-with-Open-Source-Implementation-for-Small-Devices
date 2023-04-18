@@ -29,12 +29,12 @@ class DataHandler:
 
     def create_data(self, size = 44100*3):
         for k, start_time in enumerate(self.start_times):
-            if (self.end_times[k] - start_time) * self.samplerate >= size:
+            if ((self.end_times[k] - start_time) * self.samplerate) >= size:
                 self.indices_correct_size.append(k)
         print(len(self.indices_correct_size))
 
-        os.makedirs(f"data\\output\\training_data_{size}", exist_ok = True)
-        os.makedirs(f"data\\output\\test_data_{size}", exist_ok = True)
+        os.makedirs(f"data\\output\\training_{size/self.samplerate:.3f}s", exist_ok = True)
+        os.makedirs(f"data\\output\\test_{size/self.samplerate:.3f}s", exist_ok = True)
 
         for file in os.listdir('data\\input'):
             current_file = wavfile.read(os.path.join('data\\input', file))[1]
@@ -49,14 +49,14 @@ class DataHandler:
             for j in self.indices_current_file:
                 begin = self.start_times[j] * self.samplerate
                 end = self.start_times[j] * self.samplerate + size
-                audio_data_portion = current_file[int(begin):int(end)]
-                l = l + 1
+                clip = current_file[int(begin):int(end)]
+                l += 1
                 if l % 2 == 0:
-                    wavfile.write(f"data\\output\\training_data_{size}\\{j+1}_{self.names[j]}_training_{size}_{self.labels[j]}.wav",
-                                  self.samplerate, np.array(audio_data_portion, dtype=np.int16))
+                    wavfile.write(f"data\\output\\training_{size/self.samplerate:.3f}s\\{j+1}_{self.names[j]}_{self.labels[j]}.wav",
+                                  self.samplerate, np.array(clip, dtype=np.float32))
                 else:
-                    wavfile.write(f"data\\output\\test_data_{size}\\{j+1}_{self.names[j]}_test_{size}_{self.labels[j]}.wav",
-                                  self.samplerate, np.array(audio_data_portion, dtype=np.int16))
+                    wavfile.write(f"data\\output\\test_{size/self.samplerate:.3f}s\\{j+1}_{self.names[j]}_{self.labels[j]}.wav",
+                                  self.samplerate, np.array(clip, dtype=np.float32))
 
 if __name__ == '__main__':
     datahandler = DataHandler(44100)
