@@ -38,22 +38,23 @@ class DataHandler:
             for i in self.indices_correct_size:
                 if 'data\\input\\' + self.names[i] + '.wav' == os.path.join('data\\input', file):
                     self.indices_current_file.append(i)
-                #    self.is_same_file = True
-                #elif self.is_same_file:
-                #    self.is_same_file = False
-                #    break
-            print(str(len(self.indices_current_file)) + " indices in " + os.path.join('data\\input', file))
+            total_number_of_clips = 0
             for j in self.indices_current_file:
+                number_of_clips = int(np.floor(((self.end_times[j] - self.start_times[j]) * self.samplerate) / size))
+                total_number_of_clips += number_of_clips
                 begin = self.start_times[j] * self.samplerate
-                end = self.start_times[j] * self.samplerate + size
-                clip = current_file[int(begin):int(end)]
-                l += 1
-                if l % 2 == 0:
-                    wavfile.write(f"data\\output\\training_{size/self.samplerate:.3f}s\\{j+1}_{self.names[j]}_{self.labels[j]}.wav",
-                                  self.samplerate, np.array(clip, dtype=np.int16))
-                else:
-                    wavfile.write(f"data\\output\\test_{size/self.samplerate:.3f}s\\{j+1}_{self.names[j]}_{self.labels[j]}.wav",
-                                  self.samplerate, np.array(clip, dtype=np.int16))
+                for m in range(number_of_clips):
+                    end = begin + size
+                    clip = current_file[int(begin):int(end)]
+                    l += 1
+                    if l % 2 == 0:
+                        wavfile.write(f"data\\output\\training_{size/self.samplerate:.3f}s\\{j+1},{m+1}_{self.names[j]}_{self.labels[j]}.wav",
+                                    self.samplerate, np.array(clip, dtype=np.int16))
+                    else:
+                        wavfile.write(f"data\\output\\test_{size/self.samplerate:.3f}s\\{j+1},{m+1}_{self.names[j]}_{self.labels[j]}.wav",
+                                    self.samplerate, np.array(clip, dtype=np.int16))
+                    begin = end
+            print(os.path.join('data\\input', file) + " Indicies: " + str(len(self.indices_current_file)) + " Total clips: " + str(total_number_of_clips))
             self.indices_current_file = []
 
 if __name__ == '__main__':
