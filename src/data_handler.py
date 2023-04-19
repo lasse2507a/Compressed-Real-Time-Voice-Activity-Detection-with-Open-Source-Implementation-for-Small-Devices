@@ -54,10 +54,5 @@ class DataHandler:
                         wavfile.write(f"data\\output\\test_{size/self.samplerate:.3f}s\\{j+1},{m+1}_{self.names[j]}_{self.labels[j]}.wav",
                                     self.samplerate, np.array(clip, dtype=np.int16))
                     begin = end
-            print(os.path.join('data\\input', file) + " Indicies: " + str(len(self.indices_current_file)) + " Total clips: " + str(total_number_of_clips))
+            print(os.path.join('data\\input', file) + " indicies: " + str(len(self.indices_current_file)) + " total clips: " + str(total_number_of_clips))
             self.indices_current_file = []
-
-if __name__ == '__main__':
-    datahandler = DataHandler(44100)
-    datahandler.load_csv()
-    datahandler.create_data()
