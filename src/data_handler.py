@@ -47,7 +47,9 @@ class DataHandler:
                 for m in range(number_of_clips):
                     end = begin + size
                     clip = current_file[int(begin):int(end)]
-                    clip = librosa.resample(clip, self.samplerate, new_samplerate)
+                    # Converting to float and resampling (works, but is very slow)
+                    #clip = np.array(current_file[int(begin):int(end)], dtype = 'f')
+                    #clip = librosa.resample(y = clip, orig_sr = self.samplerate, target_sr = new_samplerate, restype = 'kaiser_fast')
                     l += 1
                     if l % 2 == 0:
                         wavfile.write(f"data\\output\\training_{size/self.samplerate:.3f}s\\{j+1},{m+1}_{self.names[j]}_{self.labels[j]}.wav",

@@ -57,7 +57,7 @@ def batch_implementation():
     print("batch implementation")
 
 if __name__ == '__main__':
-    frequency_test()
-    #data_generation()
+    #frequency_test()
+    data_generation()
     #batch_implementation()
     #real_time_implementation()
