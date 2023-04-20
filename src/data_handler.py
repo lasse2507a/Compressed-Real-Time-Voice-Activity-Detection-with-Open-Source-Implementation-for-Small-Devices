@@ -2,6 +2,7 @@ import csv
 import os
 import numpy as np
 import scipy.io.wavfile as wavfile
+import librosa
 
 class DataHandler:
     def __init__(self, samplerate):
@@ -23,7 +24,7 @@ class DataHandler:
                 self.end_times.append(float(row[2]))
                 self.labels.append(int(row[3]))
 
-    def create_data(self, size = 44100*3):
+    def create_data(self, size, new_samplerate):
         for k, start_time in enumerate(self.start_times):
             if ((self.end_times[k] - start_time) * self.samplerate) >= size:
                 self.indices_correct_size.append(k)
@@ -46,6 +47,7 @@ class DataHandler:
                 for m in range(number_of_clips):
                     end = begin + size
                     clip = current_file[int(begin):int(end)]
+                    clip = librosa.resample(clip, self.samplerate, new_samplerate)
                     l += 1
                     if l % 2 == 0:
                         wavfile.write(f"data\\output\\training_{size/self.samplerate:.3f}s\\{j+1},{m+1}_{self.names[j]}_{self.labels[j]}.wav",
