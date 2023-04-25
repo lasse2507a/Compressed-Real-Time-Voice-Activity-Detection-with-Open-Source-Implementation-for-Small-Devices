@@ -8,3 +8,4 @@ SIZE = 512
 
 if __name__ == '__main__':
     print("main")
+    data_generation()
