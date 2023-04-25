@@ -8,7 +8,3 @@ SIZE = 512
 
 if __name__ == '__main__':
     print("main")
-    #frequency_test()
-    #data_generation()
-    #batch_implementation()
-    #real_time_implementation()
