@@ -3,14 +3,21 @@ import scipy as sp
 import matplotlib.pyplot as plt
 from data_processing.synthetic_data_generator import SineWaveGenerator
 from data_processing.data_handler import DataHandler
+from data_processing.preprocessing import Preprocessor
 
 F_SAMPLING = 16000
-SIZE = 1000
+SIZE = 48000
+WINDOW_SIZE = 16000
 
 def data_generation():
     datahandler = DataHandler(samplerate = F_SAMPLING)
     datahandler.load_csv()
     datahandler.create_data(size = SIZE)
+
+def preprocessing():
+    print("Preprocessing started")
+    preprocessor = Preprocessor(F_SAMPLING, WINDOW_SIZE)
+    preprocessor.process('data\\output\\preprocess_test')
 
 def frequency_test():
     t = SineWaveGenerator(SIZE, F_SAMPLING).time()

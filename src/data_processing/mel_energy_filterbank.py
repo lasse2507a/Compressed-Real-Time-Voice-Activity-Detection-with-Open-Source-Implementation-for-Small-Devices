@@ -12,7 +12,7 @@ class MelEnergyFilterbank:
         lowerMel = 1125 * np.log(1 + self.freq_l/700)
         higherMel = 1125 * np.log(1 + self.freq_h/700)
         melBand = np.linspace(lowerMel, higherMel, self.nMels+2)
-        freqBand = 700*(np.exp(melBand/1125) - 1)
+        freqBand = 700 * (np.exp(melBand/1125) - 1)
         f = np.floor((nFFT + 1) * freqBand/fs).astype(int)
 
         for m in range(1, self.nMels+1):
@@ -28,4 +28,4 @@ class MelEnergyFilterbank:
     def compute(self, fftPower):
         for i in range(0, self.nMels):
             self.melEnergy[i] = np.log(np.sum(self.filterbank[:,i] * fftPower[0:self.nFFT//2]))
-        return self.melEnergy
+        return self.melEnergy.flatten()
