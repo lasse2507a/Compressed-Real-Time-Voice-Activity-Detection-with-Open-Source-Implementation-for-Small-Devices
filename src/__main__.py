@@ -3,9 +3,10 @@ from data_processing.__init__ import data_generation
 from real_time_implementation.__init__ import real_time_implementation
 from training.__init__ import execute_training
 
-F_SAMPLING = 48000
+F_SAMPLING = 16000
 SIZE = 512
 
 if __name__ == '__main__':
     print("main")
-    data_generation()
+    #data_generation()
+    frequency_test()

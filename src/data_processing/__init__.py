@@ -5,7 +5,7 @@ from data_processing.synthetic_data_generator import SineWaveGenerator
 from data_processing.data_handler import DataHandler
 
 F_SAMPLING = 16000
-SIZE = 16000*3
+SIZE = 1000
 
 def data_generation():
     datahandler = DataHandler(samplerate = F_SAMPLING)
@@ -15,13 +15,15 @@ def data_generation():
 def frequency_test():
     t = SineWaveGenerator(SIZE, F_SAMPLING).time()
     f = SineWaveGenerator(SIZE, F_SAMPLING).frequency()
-    signal = SineWaveGenerator(SIZE, F_SAMPLING).five_sine_wave(freq4 = 8500)
-    signal = np.convolve(signal, sp.firwin(numtaps = 32+1, cutoff = [300, 8000], window = 'hamming', pass_zero = False, fs = F_SAMPLING), mode = "same")
+    signal = SineWaveGenerator(SIZE, F_SAMPLING).five_sine_wave()
     signal_fft = np.abs(np.fft.fft(signal))[:int(SIZE/2)]
+    signal_fft2 = np.abs(np.fft.fft(signal))**2
 
     plt.figure(figsize=(16,9))
-    plt.subplot(2, 1, 1)
+    plt.subplot(3, 1, 1)
     plt.plot(t, signal, ".-")
-    plt.subplot(2, 1, 2)
+    plt.subplot(3, 1, 2)
     plt.plot(f, signal_fft, ".-")
+    plt.subplot(3, 1, 3)
+    plt.plot(np.linspace(0, F_SAMPLING, SIZE), signal_fft2, ".-")
     plt.show()
