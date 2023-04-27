@@ -20,7 +20,7 @@ conda activate p6-vad
 ```
 Open VSCode:
 ```
-code .
+code [PATH].
 ```
 Open project.
 
