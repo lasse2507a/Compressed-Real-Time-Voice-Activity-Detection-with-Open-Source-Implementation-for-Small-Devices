@@ -7,12 +7,12 @@ def execute_training():
     train_labels = ...
 
     # Define hyperparameters for the model
-    K = ...
-    L = ...
-    M = ...
-    N = ...
-    nClasses = ...
-    div = ...
+    K = 40
+    L = 20
+    M = 10
+    N = 100
+    nClasses = 2
+    div = 10
 
     # Create an instance of the CNNModel
     model = CNNModel(K, L, M, N, nClasses, div)
@@ -45,8 +45,7 @@ def execute_training():
             metric.update_state(y_batch, logits)
 
         # Print the loss and accuracy for the epoch
-        print('Epoch {}/{}: Loss={}, Accuracy={}'.format(
-            epoch+1, num_epochs, loss.numpy(), metric.result().numpy()))
+        print(f'Epoch {epoch+1}/{num_epochs}: Loss={loss.numpy()}, Accuracy={metric.result().numpy()}')
 
         # Save the model's weights and optimizer state to disk
         manager.save()
