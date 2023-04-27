@@ -3,8 +3,8 @@ from training.cnn_model import CNNModel
 
 def execute_training():
     # Define your training data
-    train_data = ...
-    train_labels = ...
+    train_data = ["replace", "with", "training", "data"]
+    train_labels = ["replace", "with", "training", "labels"]
 
     # Define hyperparameters for the model
     K = 40
