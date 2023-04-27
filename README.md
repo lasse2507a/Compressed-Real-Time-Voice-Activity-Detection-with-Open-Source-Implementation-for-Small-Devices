@@ -18,11 +18,10 @@ Enter the environment:
 ```
 conda activate p6-vad
 ```
-Open VSCode:
+Open the project folder in VS Code:
 ```
 code [PATH].
 ```
-Open project.
 
 ## Docker
 Build the Docker image locally using the following command:
