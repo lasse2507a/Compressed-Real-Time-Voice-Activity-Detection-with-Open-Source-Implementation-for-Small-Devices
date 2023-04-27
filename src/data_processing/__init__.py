@@ -17,6 +17,7 @@ def data_generation():
 def preprocessing():
     preprocessor = Preprocessor(F_SAMPLING, WINDOW_SIZE)
     preprocessor.process('data\\output\\training_clip_len_17200samples')
+    preprocessor.process('data\\output\\test_clip_len_17200samples')
 
 def frequency_test():
     t = SineWaveGenerator(SIZE, F_SAMPLING).time()
