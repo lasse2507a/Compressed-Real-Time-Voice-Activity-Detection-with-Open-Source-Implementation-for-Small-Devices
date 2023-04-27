@@ -39,13 +39,12 @@ class Preprocessor:
                         picture_MFSC = np.concatenate(list(self.frames_MFSC.queue), axis=1)
                         np.save(f"{data_path}\\mfsc_window_{self.size}samples\\mfsc{j}_{file_name}.npy", picture_MFSC)
                         print(f"{j} picture saved")
+                        # plt.figure(figsize=(10, 4))
+                        # librosa.display.specshow(picture_MFSC, x_axis='time', y_axis='mel', cmap='coolwarm')
+                        # plt.colorbar()
+                        # plt.title('MFSC Features')
+                        # plt.tight_layout()
+                        # plt.savefig(f'data\\output\\preprocess_test\\pictures\\{file_name}_mfsc_example{j}')
                         j += 1
                         for i in range(5):
                             self.frames_MFSC.get()
-
-                # plt.figure(figsize=(10, 4))
-                # librosa.display.specshow(picture_MFSC, x_axis='time', y_axis='mel', cmap='coolwarm')
-                # plt.colorbar()
-                # plt.title('MFSC Features')
-                # plt.tight_layout()
-                # plt.show()
