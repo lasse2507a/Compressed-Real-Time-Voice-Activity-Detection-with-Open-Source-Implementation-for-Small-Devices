@@ -1,8 +1,8 @@
 import os
 from queue import Queue
 import numpy as np
-#import matplotlib.pyplot as plt
 import librosa
+#import matplotlib.pyplot as plt
 
 class Preprocessor:
     def __init__(self, samplerate, size):
@@ -35,7 +35,7 @@ class Preprocessor:
                     melspectrogram = librosa.feature.melspectrogram(y=zero_padded_frame, sr=self.samplerate, window='boxcar', n_fft=self.FFT_size, hop_length=self.hop_length,
                                                                     center=False, n_mels=self.mel_size, fmin=300, fmax=8000)
                     self.frames_MFSC.put(librosa.power_to_db(melspectrogram, ref=np.max))
-                    if self.frames_MFSC.qsize() == 40:
+                    if self.frames_MFSC.full():
                         picture_MFSC = np.concatenate(list(self.frames_MFSC.queue), axis=1)
                         np.save(f"{data_path}\\mfsc_window_{self.size}samples\\mfsc{j}_{file_name}.npy", picture_MFSC)
                         print(f"{j} picture saved")

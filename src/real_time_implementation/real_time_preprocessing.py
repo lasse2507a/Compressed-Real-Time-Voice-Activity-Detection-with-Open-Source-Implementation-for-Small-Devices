@@ -3,34 +3,38 @@ import threading
 import librosa
 import scipy.signal as sp
 import numpy as np
+import matplotlib.pyplot as plt
 
 class RealTimeMFSCPreprocessor:
-    def __init__(self, samplerate, blocksize):
-        self.samplerate = samplerate
-        self.blocksize = blocksize
-        self.first_round = True
-        self.previous_half = Queue()
+    def __init__(self, samplerate, size):
         self.thread_stop_event = threading.Event()
-        self.melspecs = Queue()
-        self.melspecs.maxsize = 64
+        self.samplerate = samplerate
+        self.size = size*2
+        self.FFT_size = int(2**np.ceil(np.log2(self.size)))
+        self.window = np.hanning(self.size)
+        self.frames_MFSC = Queue(maxsize=40)
+        self.mel_size = 40
 
     def start_preprocessing(self, recordings):
         print("MFSC preprocessing started")
+        recording = recordings.get()
+        previous_recording = recording
         while not self.thread_stop_event.is_set():
             recording = recordings.get()
-            recording_copy = np.copy(recording)
-            self.previous_half.put(recording_copy[int(self.blocksize/2):])
-            if not self.first_round:
-                overlapped_recording = np.concatenate((self.previous_half.get(), recording))
-                filtered_recording = np.convolve(overlapped_recording, sp.firwin(numtaps = 64+1, cutoff = [300, 8000], window = 'hamming', pass_zero = 'bandpass', fs = self.samplerate), mode = "same")
-                downsampled_recording = filtered_recording[::3]
-                fft_overlapped_recording = np.abs(np.fft.fft(downsampled_recording))[:int(len(filtered_recording)/2)]
-                librosa.filters.mel(sr = self.samplerate, n_fft = 256, n_mels = 64, fmin = 300, fmax = 8000)
-                self.melspecs.put(fft_overlapped_recording)
-            self.first_round = False
-            if self.melspecs.full():
+            frame = np.concatenate((previous_recording, recording))
+            previous_recording = recording
+            frame = frame * self.window
+            zero_padded_frame = np.zeros(self.FFT_size)
+            zero_padded_frame[:self.size] = frame
+            melspectrogram = librosa.feature.melspectrogram(y=zero_padded_frame, sr=self.samplerate, window='boxcar', n_fft=self.FFT_size,
+                                                                    center=False, n_mels=self.mel_size, fmin=300, fmax=8000)
+            self.frames_MFSC.put(librosa.power_to_db(melspectrogram, ref=np.max))
+            if self.frames_MFSC.full():
                 print("MFSC preprocessing queue full")
-                self.thread_stop_event.set()
+                picture_MFSC = np.concatenate(list(self.frames_MFSC.queue), axis=1)
+                
+                for i in range(5):
+                            self.frames_MFSC.get()
 
     def stop_preprocessing(self):
         self.thread_stop_event.set()

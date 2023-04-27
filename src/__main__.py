@@ -8,4 +8,5 @@ if __name__ == '__main__':
     print("main")
     #data_generation()
     #frequency_test()
-    preprocessing()
+    #preprocessing()
+    real_time_implementation()

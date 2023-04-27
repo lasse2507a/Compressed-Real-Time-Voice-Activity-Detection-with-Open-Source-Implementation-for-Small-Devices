@@ -3,8 +3,8 @@ import time
 from real_time_implementation.audio_recorder import AudioRecorder
 from real_time_implementation.real_time_preprocessing import RealTimeMFSCPreprocessor
 
-F_SAMPLING = 48000
-SIZE = 512
+F_SAMPLING = 16000
+SIZE = 200
 
 def real_time_implementation():
     recorder = AudioRecorder(F_SAMPLING, SIZE)
@@ -16,7 +16,7 @@ def real_time_implementation():
     thread_recorder.start()
     thread_preprocessor.start()
 
-    time.sleep(1)
+    time.sleep(5)
 
     recorder.stop_recording()
     preprocessor.stop_preprocessing()
