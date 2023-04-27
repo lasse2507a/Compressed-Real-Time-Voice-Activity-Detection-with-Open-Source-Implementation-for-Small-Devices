@@ -40,7 +40,7 @@ class Preprocessor:
                         np.save(f"{data_path}\\mfsc_window_{self.size}samples\\mfsc{j}_{file_name}.npy", picture_MFSC)
                         print(f"{j} picture saved")
                         # plt.figure(figsize=(10, 4))
-                        # librosa.display.specshow(picture_MFSC, x_axis='time', y_axis='mel', cmap='coolwarm')
+                        # librosa.display.specshow(picture_MFSC, y_coords=librosa.mel_frequencies(n_mels=40, fmin=300, fmax=8000), x_axis='time', y_axis='mel', cmap='coolwarm')
                         # plt.colorbar()
                         # plt.title('MFSC Features')
                         # plt.tight_layout()

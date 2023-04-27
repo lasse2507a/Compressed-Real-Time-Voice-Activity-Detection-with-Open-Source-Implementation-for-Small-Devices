@@ -35,6 +35,11 @@ class RealTimeMFSCPreprocessor:
                 self.pictures_MFSC.put(picture_MFSC)
                 for i in range(5):
                     self.frames_MFSC.get()
+                # plt.figure(figsize=(10, 4))
+                # librosa.display.specshow(picture_MFSC, y_coords=librosa.mel_frequencies(n_mels=40, fmin=300, fmax=8000), x_axis='time', y_axis='mel', cmap='coolwarm')
+                # plt.colorbar()
+                # plt.title('MFSC Features')
+                # plt.show()
 
     def stop_preprocessing(self):
         self.thread_stop_event.set()

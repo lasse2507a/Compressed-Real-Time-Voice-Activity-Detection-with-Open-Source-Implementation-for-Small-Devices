@@ -19,7 +19,7 @@ def real_time_implementation():
     thread_preprocessor.start()
     #thread_model.start()
 
-    time.sleep(5)
+    time.sleep(10)
 
     recorder.stop_recording()
     preprocessor.stop_preprocessing()
