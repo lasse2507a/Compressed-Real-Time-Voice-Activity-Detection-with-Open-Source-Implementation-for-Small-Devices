@@ -27,7 +27,7 @@ class DataHandler:
         for k, start_time in enumerate(self.start_times):
             if ((self.end_times[k] - start_time) * self.samplerate) >= size:
                 self.indices_correct_size.append(k)
-        print("Indices of intervals with correct size: " + str(len(self.indices_correct_size)))
+        print("indices of intervals with correct size: " + str(len(self.indices_correct_size)))
 
         os.makedirs(f"data\\output\\training_clip_len_{size}samples", exist_ok = True)
         os.makedirs(f"data\\output\\test_clip_len_{size}samples", exist_ok = True)
