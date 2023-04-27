@@ -1,8 +1,8 @@
 import tensorflow as tf
 
-class ModelV1(tf.keras.Model):
+class CNNModel(tf.keras.Model):
     def __init__(self, K, L, M, N, nClasses, div):
-        super(ModelV1, self).__init__()
+        super(CNNModel, self).__init__()
         self.K = K
         self.L = L
         self.M = M
