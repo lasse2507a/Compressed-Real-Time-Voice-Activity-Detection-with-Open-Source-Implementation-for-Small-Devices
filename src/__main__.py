@@ -6,6 +6,6 @@ from training.__init__ import execute_training
 
 if __name__ == '__main__':
     print("main")
-    data_generation()
+    #data_generation()
     #frequency_test()
-    #preprocessing()
+    preprocessing()

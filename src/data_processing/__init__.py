@@ -6,7 +6,7 @@ from data_processing.data_handler import DataHandler
 from data_processing.preprocessing import Preprocessor
 
 F_SAMPLING = 16000
-SIZE = 8200
+SIZE = 17200
 WINDOW_SIZE = 400
 
 def data_generation():
