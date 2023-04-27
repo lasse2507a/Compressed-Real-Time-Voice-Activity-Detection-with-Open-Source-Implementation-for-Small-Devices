@@ -1,8 +1,7 @@
 from queue import Queue
 import threading
-import librosa
-import scipy.signal as sp
 import numpy as np
+import librosa
 import matplotlib.pyplot as plt
 
 class RealTimeMFSCPreprocessor:
@@ -13,6 +12,7 @@ class RealTimeMFSCPreprocessor:
         self.FFT_size = int(2**np.ceil(np.log2(self.size)))
         self.window = np.hanning(self.size)
         self.frames_MFSC = Queue(maxsize=40)
+        self.pictures_MFSC = Queue()
         self.mel_size = 40
 
     def start_preprocessing(self, recordings):
@@ -32,9 +32,9 @@ class RealTimeMFSCPreprocessor:
             if self.frames_MFSC.full():
                 print("MFSC preprocessing queue full")
                 picture_MFSC = np.concatenate(list(self.frames_MFSC.queue), axis=1)
-                
+                self.pictures_MFSC.put(picture_MFSC)
                 for i in range(5):
-                            self.frames_MFSC.get()
+                    self.frames_MFSC.get()
 
     def stop_preprocessing(self):
         self.thread_stop_event.set()

@@ -46,5 +46,5 @@ class Preprocessor:
                         # plt.tight_layout()
                         # plt.savefig(f'data\\output\\preprocess_test\\pictures\\{file_name}_mfsc_example{j}')
                         j += 1
-                        for i in range(5):
+                        for k in range(5):
                             self.frames_MFSC.get()
