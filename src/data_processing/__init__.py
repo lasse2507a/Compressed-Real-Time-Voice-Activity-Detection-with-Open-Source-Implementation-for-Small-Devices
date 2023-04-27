@@ -6,8 +6,8 @@ from data_processing.data_handler import DataHandler
 from data_processing.preprocessing import Preprocessor
 
 F_SAMPLING = 16000
-SIZE = 48000
-WINDOW_SIZE = 16000
+SIZE = 8200
+WINDOW_SIZE = 400
 
 def data_generation():
     datahandler = DataHandler(samplerate = F_SAMPLING)
@@ -17,7 +17,7 @@ def data_generation():
 def preprocessing():
     print("Preprocessing started")
     preprocessor = Preprocessor(F_SAMPLING, WINDOW_SIZE)
-    preprocessor.process3('data\\output\\preprocess_test')
+    preprocessor.process('data\\output\\preprocess_test')
 
 def frequency_test():
     t = SineWaveGenerator(SIZE, F_SAMPLING).time()
