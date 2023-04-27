@@ -51,7 +51,7 @@ class DataHandler:
                         wavfile.write(f"data\\output\\training_clip_len_{size}samples\\{j+1},{m+1}_{self.names[j]}_{self.labels[j]}.wav",
                                     self.samplerate, np.array(clip, dtype=np.int16))
                     else:
-                        wavfile.write(f"data\\output\\training_clip_len_{size}samples\\{j+1},{m+1}_{self.names[j]}_{self.labels[j]}.wav",
+                        wavfile.write(f"data\\output\\test_clip_len_{size}samples\\{j+1},{m+1}_{self.names[j]}_{self.labels[j]}.wav",
                                     self.samplerate, np.array(clip, dtype=np.int16))
                     begin = end
             print(os.path.join('data\\input', file) + " indicies: " + str(len(self.indices_current_file)) + " total clips: " + str(total_number_of_clips))
