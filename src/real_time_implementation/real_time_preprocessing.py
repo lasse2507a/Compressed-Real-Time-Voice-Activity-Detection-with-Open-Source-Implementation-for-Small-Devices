@@ -2,7 +2,7 @@ from queue import Queue
 import threading
 import numpy as np
 import librosa
-import matplotlib.pyplot as plt
+#import matplotlib.pyplot as plt
 
 class RealTimeMFSCPreprocessor:
     def __init__(self, samplerate, size):
@@ -33,7 +33,7 @@ class RealTimeMFSCPreprocessor:
                 print("MFSC preprocessing queue full")
                 picture_MFSC = np.concatenate(list(self.frames_MFSC.queue), axis=1)
                 self.pictures_MFSC.put(picture_MFSC)
-                for i in range(5):
+                for _ in range(5):
                     self.frames_MFSC.get()
                 # plt.figure(figsize=(10, 4))
                 # librosa.display.specshow(picture_MFSC, y_coords=librosa.mel_frequencies(n_mels=40, fmin=300, fmax=8000), x_axis='time', y_axis='mel', cmap='coolwarm')
