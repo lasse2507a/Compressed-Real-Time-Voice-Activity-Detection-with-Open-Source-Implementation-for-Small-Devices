@@ -1,23 +1,24 @@
 import tensorflow as tf
 
 class CNNModel(tf.keras.Model):
-    def __init__(self, K, L, M, N, nClasses, div):
+    def __init__(self, K, L, M, N, classes, div, batch_size, keep_prob, learning_rate):
         super(CNNModel, self).__init__()
         self.K = K
         self.L = L
         self.M = M
         self.N = N
-        self.nClasses = nClasses
+        self.classes = classes
         self.div = div
+        self.batch_size = batch_size
 
         with tf.name_scope("hyperparameters"):
-            self.learning_rate = tf.Variable(tf.float32)
-            self.keep_prob = tf.Variable(tf.float32)
+            self.learning_rate = tf.Variable(tf.cast(learning_rate, dtype=tf.float32))
+            self.keep_prob = tf.Variable(keep_prob)
 
         with tf.name_scope("inputs"):
-            self.x = tf.Variable(tf.float32, shape=[None, 40, 40], name="x-input")
+            self.x = tf.Variable(initial_value=tf.zeros([self.batch_size, 40, 40]), shape=tf.TensorShape([self.batch_size, 40, 40]), name="x-input")
             self.x_image = tf.reshape(self.x, [-1, 40, 40, 1], name="x-image")
-            self.Y_ = tf.Variable(tf.float32, shape=[None, self.nClasses], name="y-input")
+            self.Y_ = tf.Variable(initial_value=tf.zeros([self.batch_size, 40, 40]), shape=tf.TensorShape([self.batch_size, 40, 40]), name="y-input")
 
         with tf.name_scope("model"):
             self.W1 = tf.Variable(tf.random.truncated_normal([5,5,1,self.K], stddev=0.05))
@@ -42,6 +43,10 @@ class CNNModel(tf.keras.Model):
             self.W5 = tf.Variable(tf.random.truncated_normal([self.N, 2], stddev=0.05))
             self.B5 = tf.Variable(tf.ones([2])/self.div)
             self.Y = tf.nn.softmax(tf.matmul(self.Y4, self.W5) + self.B5)
+
+        self.loss_fn = tf.keras.losses.SparseCategoricalCrossentropy()
+        self.optimizer = tf.keras.optimizers.Adam(learning_rate=self.learning_rate)
+        self.metric = tf.keras.metrics.SparseCategoricalAccuracy()
 
     def call(self, inputs, training=None, mask=None):
         self.x.assign(inputs['x'])
