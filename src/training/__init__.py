@@ -6,16 +6,8 @@ def execute_training():
     train_data = ["replace", "with", "training", "data"]
     train_labels = ["replace", "with", "training", "labels"]
 
-    # Define hyperparameters for the model
-    K = 40
-    L = 20
-    M = 10
-    N = 100
-    nClasses = 2
-    div = 10
-
     # Create an instance of the CNNModel
-    model = CNNModel(K, L, M, N, nClasses, div)
+    model = CNNModel(K=40, L=20, M=10, N=100, nClasses=2, div=10)
 
     # Define a loss function and a metric for training
     loss_fn = tf.keras.losses.CategoricalCrossentropy()

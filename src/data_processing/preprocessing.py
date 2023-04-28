@@ -43,14 +43,14 @@ class Preprocessor:
                                                                 center=False, n_mels=self.mel_size, fmin=300, fmax=8000)
                 frames_MFSC.put(librosa.power_to_db(melspectrogram, ref=np.max))
                 if frames_MFSC.full():
-                    picture_MFSC = np.concatenate(list(frames_MFSC.queue), axis=1)
-                    np.save(f"{data_path}\\mfsc_window_{self.size}samples\\{file_name}_mfsc{j}.npy", picture_MFSC)
+                    image_MFSC = np.concatenate(list(frames_MFSC.queue), axis=1)
+                    np.save(f"{data_path}\\mfsc_window_{self.size}samples\\{file_name}_mfsc{j}.npy", image_MFSC)
                     # plt.figure(figsize=(10, 4))
-                    # librosa.display.specshow(picture_MFSC, y_coords=librosa.mel_frequencies(n_mels=40, fmin=300, fmax=8000), x_axis='time', y_axis='mel', cmap='coolwarm')
+                    # librosa.display.specshow(image_MFSC, y_coords=librosa.mel_frequencies(n_mels=40, fmin=300, fmax=8000), x_axis='time', y_axis='mel', cmap='coolwarm')
                     # plt.colorbar()
                     # plt.title('MFSC Features')
                     # plt.tight_layout()
-                    # plt.savefig(f'data\\output\\preprocess_test\\pictures\\{file_name}_mfsc_example{j}')
+                    # plt.savefig(f'data\\output\\preprocess_test\\images\\{file_name}_mfsc_example{j}')
                     j += 1
                     for _ in range(5):
                         frames_MFSC.get()

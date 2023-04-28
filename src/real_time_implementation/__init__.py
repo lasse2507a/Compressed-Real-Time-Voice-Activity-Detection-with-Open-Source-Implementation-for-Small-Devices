@@ -13,7 +13,7 @@ def real_time_implementation():
 
     thread_recorder = threading.Thread(target=recorder.start_recording, daemon=True)
     thread_preprocessor = threading.Thread(target=preprocessor.start_preprocessing, args=(recorder.recordings,), daemon=True)
-    #thread_model = threading.Thread(target=model.start, args=(preprocessor.pictures_MFSC,), daemon=True)
+    #thread_model = threading.Thread(target=model.start, args=(preprocessor.images_MFSC,), daemon=True)
 
     thread_recorder.start()
     thread_preprocessor.start()

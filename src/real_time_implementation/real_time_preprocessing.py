@@ -12,7 +12,7 @@ class RealTimeMFSCPreprocessor:
         self.FFT_size = int(2**np.ceil(np.log2(self.size)))
         self.window = np.hanning(self.size)
         self.frames_MFSC = Queue(maxsize=40)
-        self.pictures_MFSC = Queue()
+        self.images_MFSC = Queue()
         self.mel_size = 40
 
     def start_preprocessing(self, recordings):
@@ -31,12 +31,12 @@ class RealTimeMFSCPreprocessor:
             self.frames_MFSC.put(librosa.power_to_db(melspectrogram, ref=np.max))
             if self.frames_MFSC.full():
                 print("MFSC preprocessing queue full")
-                picture_MFSC = np.concatenate(list(self.frames_MFSC.queue), axis=1)
-                self.pictures_MFSC.put(picture_MFSC)
+                image_MFSC = np.concatenate(list(self.frames_MFSC.queue), axis=1)
+                self.images_MFSC.put(image_MFSC)
                 for _ in range(5):
                     self.frames_MFSC.get()
                 # plt.figure(figsize=(10, 4))
-                # librosa.display.specshow(picture_MFSC, y_coords=librosa.mel_frequencies(n_mels=40, fmin=300, fmax=8000), x_axis='time', y_axis='mel', cmap='coolwarm')
+                # librosa.display.specshow(image_MFSC, y_coords=librosa.mel_frequencies(n_mels=40, fmin=300, fmax=8000), x_axis='time', y_axis='mel', cmap='coolwarm')
                 # plt.colorbar()
                 # plt.title('MFSC Features')
                 # plt.show()
