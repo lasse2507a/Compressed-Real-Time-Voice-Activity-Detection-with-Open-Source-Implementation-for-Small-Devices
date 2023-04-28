@@ -9,7 +9,7 @@ def execute_training(data_path):
     training_data = np.empty((0, 40, 40))
     training_labels = np.empty((0,))
     for file in os.listdir(data_path):
-        file_data = np.load(os.path.join('data\\output\\training_clip_len_17200samples\\mfsc_window_400samples', file))
+        file_data = np.load(os.path.join(data_path, file))
         training_data = np.concatenate([training_data, file_data], axis=0)
         label = int(file.split("_")[-2])
         training_labels = np.concatenate(training_labels, label)
