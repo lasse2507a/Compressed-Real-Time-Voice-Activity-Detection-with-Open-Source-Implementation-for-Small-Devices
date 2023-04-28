@@ -21,7 +21,6 @@ def execute_training(data_path):
     checkpoint = tf.train.Checkpoint(model=model)
     manager = tf.train.CheckpointManager(checkpoint, 'models\\model_1\\checkpoints', max_to_keep=5)
 
-    # Train the model
     num_epochs = 12
     batch_size = 25000
     num_batches = len(training_data) // batch_size
@@ -37,13 +36,10 @@ def execute_training(data_path):
             model.optimizer.apply_gradients(zip(grads, model.trainable_variables))
             model.metric.update_state(y_batch, logits)
 
-        # Print the loss and accuracy for the epoch
         print(f'Epoch {epoch+1}/{num_epochs}: Loss={loss.numpy()}, Accuracy={model.metric.result().numpy()}')
 
-        # Save the model's weights and optimizer state to disk
         manager.save()
 
-        # Reset the metric for the next epoch
         model.metric.reset_states()
 
 def visualize_model():
