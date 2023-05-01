@@ -13,16 +13,16 @@ def execute_training(training_data_path, validation_data_path):
             file_data = np.load(os.path.join(path, file))
             data = np.concatenate([data, file_data], axis=0)
             label = int(file.split("_")[-2])
-            labels = np.concatenate(labels, label)
-            return data, labels
+            labels = np.concatenate([labels, np.array([label])])
+        return data, labels
 
     training_data, training_labels = _load_data(training_data_path)
     validation_data, validation_labels = _load_data(validation_data_path)
 
     model = CNNModel(K=40, L=20, M=10, N=100, keep_prob=0.75)
 
-    model.compile(optimizer=tf.keras.optimizers.Adam(np.hstack((1e-3*np.ones(6), 
-                                                                1e-4*np.ones(4), 
+    model.compile(optimizer=tf.keras.optimizers.Adam(np.hstack((1e-3*np.ones(6),
+                                                                1e-4*np.ones(4),
                                                                 1e-5*np.ones(2)))),
                   loss=tf.keras.losses.BinaryCrossentropy(),
                   metrics=tf.keras.metrics.BinaryAccuracy())

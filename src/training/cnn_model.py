@@ -6,7 +6,7 @@ class CNNModel(tf.keras.Model):
         self.conv1 = tf.keras.layers.Conv2D(filters=K, kernel_size=[5,5], padding='SAME', activation=tf.nn.relu)
         self.conv2 = tf.keras.layers.Conv2D(filters=L, kernel_size=[5,5], padding='SAME', activation=tf.nn.relu)
         self.conv3 = tf.keras.layers.Conv2D(filters=M, kernel_size=[5,5], padding='SAME', activation=tf.nn.relu)
-        self.flatten = tf.keras.layers.Flatten([-1, 5*5*M])
+        self.flatten = tf.keras.layers.Flatten()
         self.dense1 = tf.keras.layers.Dense(units=N, activation=tf.nn.relu)
         self.dropout = tf.keras.layers.Dropout(rate=keep_prob)
         self.dense2 = tf.keras.layers.Dense(units=2, activation=tf.nn.softmax)
