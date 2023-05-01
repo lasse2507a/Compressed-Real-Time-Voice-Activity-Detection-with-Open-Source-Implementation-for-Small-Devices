@@ -18,7 +18,7 @@ class DataGenerator(tf.keras.utils.Sequence):
         batch_labels = []
         for file in batch_files:
             file_data = np.load(file)
-            batch_data.append(np.reshape(file_data, (1, 40, 40)))
+            batch_data.append(np.reshape(file_data, (1, 40, 40, 1)))
             label = int(os.path.basename(file).split("_")[-2])
             batch_labels.append(label)
         batch_data = np.concatenate(batch_data, axis=0)

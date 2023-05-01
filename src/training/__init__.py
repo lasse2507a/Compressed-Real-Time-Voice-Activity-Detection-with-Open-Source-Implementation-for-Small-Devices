@@ -27,7 +27,6 @@ def execute_training(training_data_path, validation_data_path):
               use_multiprocessing=True)
 
 def visualize_model():
-    model = CNNModel(K=40, L=20, M=10, N=100, classes=2, div=10, batch_size=25000, keep_prob=0.75, learning_rate=np.hstack((1e-3*np.ones(6),
-                                                                                                                            1e-4*np.ones(4),
-                                                                                                                            1e-5*np.ones(2))))
-    visualkeras.layered_view(model, to_file='model_architecture.png').show()
+    model = CNNModel(K=40, L=20, M=10, N=100, keep_prob=0.75)
+    model.summary()
+    #visualkeras.layered_view(model, to_file='model_architecture.png').show()

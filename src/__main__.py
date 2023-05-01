@@ -9,7 +9,7 @@ if __name__ == '__main__':
     #data_generation()
     #frequency_test()
     #preprocessing()
-    execute_training(training_data_path='data\\output\\training_clip_len_17200samples\\mfsc_window_400samples',
-                     validation_data_path='data\\output\\test_clip_len_17200samples\\mfsc_window_400samples')
     #real_time_implementation()
     #visualize_model()
+    execute_training(training_data_path='data\\output\\training_clip_len_17200samples\\mfsc_window_400samples',
+                     validation_data_path='data\\output\\test_clip_len_17200samples\\mfsc_window_400samples')
