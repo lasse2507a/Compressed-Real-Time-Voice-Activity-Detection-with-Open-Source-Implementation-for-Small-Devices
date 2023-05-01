@@ -6,7 +6,6 @@ from training.__init__ import execute_training
 from training.__init__ import visualize_model
 
 if __name__ == '__main__':
-    print("main")
     #data_generation()
     #frequency_test()
     #preprocessing()

@@ -1,23 +1,37 @@
 import os
+from concurrent.futures import ProcessPoolExecutor
 import numpy as np
 import tensorflow as tf
 import visualkeras
 from keras.utils import plot_model
 from training.cnn_model import CNNModel
 
-def execute_training(training_data_path, validation_data_path):
-    def _load_data(path):
-        data = np.empty((0, 40, 40))
-        labels = np.empty((0,))
-        for file in os.listdir(path):
-            file_data = np.load(os.path.join(path, file))
-            data = np.concatenate([data, file_data], axis=0)
-            label = int(file.split("_")[-2])
-            labels = np.concatenate([labels, np.array([label])])
-        return data, labels
+def load_data_parallel(path):
+    data = []
+    labels = []
+    num_files = 0
+    with ProcessPoolExecutor(max_workers=os.cpu_count() // 2) as executor:
+        files = [os.path.join(path, file) for file in os.listdir(path) if file.endswith(".npy")]
+        for batch in executor.map(load_data, files, chunksize=1000):
+            file_data, label = batch
+            data.append(file_data)
+            labels.append(label)
+            num_files += 1
+            if num_files % 10000 == 0:
+                print(f"processed {num_files} files out of {len(files)})")
+    data = np.concatenate(data, axis=0)
+    labels = np.concatenate(labels)
+    print("data generated successfully at path: " + str(path))
+    return data, labels
 
-    training_data, training_labels = _load_data(training_data_path)
-    validation_data, validation_labels = _load_data(validation_data_path)
+def load_data(file):
+    file_data = np.load(file)
+    label = int(os.path.basename(file).split("_")[-2])
+    return file_data, label
+
+def execute_training(training_data_path, validation_data_path):
+    training_data, training_labels = load_data_parallel(training_data_path)
+    validation_data, validation_labels = load_data_parallel(validation_data_path)
 
     model = CNNModel(K=40, L=20, M=10, N=100, keep_prob=0.75)
 
