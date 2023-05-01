@@ -1,5 +1,3 @@
-import os
-import numpy as np
 import tensorflow as tf
 import visualkeras
 from keras.utils import plot_model
@@ -9,7 +7,7 @@ from training.data_generator import DataGenerator
 def execute_training(training_data_path, validation_data_path):
     model = CNNModel(K=40, L=20, M=10, N=100, keep_prob=0.75)
 
-    model.compile(optimizer=tf.keras.optimizers.Adam(0.001), # Not same learning rate as paper
+    model.compile(optimizer=tf.keras.optimizers.Adam(0.001),
                   loss=tf.keras.losses.BinaryCrossentropy(),
                   metrics=[tf.keras.metrics.BinaryAccuracy(),
                            tf.keras.metrics.SparseCategoricalAccuracy()])
