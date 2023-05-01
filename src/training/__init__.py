@@ -5,42 +5,37 @@ import visualkeras
 from keras.utils import plot_model
 from training.cnn_model import CNNModel
 
-def execute_training(data_path):
-    training_data = np.empty((0, 40, 40))
-    training_labels = np.empty((0,))
-    for file in os.listdir(data_path):
-        file_data = np.load(os.path.join(data_path, file))
-        training_data = np.concatenate([training_data, file_data], axis=0)
-        label = int(file.split("_")[-2])
-        training_labels = np.concatenate(training_labels, label)
+def execute_training(training_data_path, validation_data_path):
+    def _load_data(path):
+        data = np.empty((0, 40, 40))
+        labels = np.empty((0,))
+        for file in os.listdir(path):
+            file_data = np.load(os.path.join(path, file))
+            data = np.concatenate([data, file_data], axis=0)
+            label = int(file.split("_")[-2])
+            labels = np.concatenate(labels, label)
+            return data, labels
 
-    model = CNNModel(K=40, L=20, M=10, N=100, classes=2, div=10, batch_size=25000, keep_prob=0.75, learning_rate=np.hstack((1e-3*np.ones(6),
-                                                                                                                            1e-4*np.ones(4),
-                                                                                                                            1e-5*np.ones(2))))
+    training_data, training_labels = _load_data(training_data_path)
+    validation_data, validation_labels = _load_data(validation_data_path)
 
-    checkpoint = tf.train.Checkpoint(model=model)
-    manager = tf.train.CheckpointManager(checkpoint, 'models\\model_1\\checkpoints', max_to_keep=5)
+    model = CNNModel(K=40, L=20, M=10, N=100, keep_prob=0.75)
 
-    num_epochs = 12
-    batch_size = 25000
-    num_batches = len(training_data) // batch_size
-    for epoch in range(num_epochs):
-        for batch in range(num_batches):
-            x_batch = training_data[batch*batch_size:(batch+1)*batch_size]
-            y_batch = training_labels[batch*batch_size:(batch+1)*batch_size]
+    model.compile(optimizer=tf.keras.optimizers.Adam(np.hstack((1e-3*np.ones(6), 
+                                                                1e-4*np.ones(4), 
+                                                                1e-5*np.ones(2)))),
+                  loss=tf.keras.losses.BinaryCrossentropy(),
+                  metrics=tf.keras.metrics.BinaryAccuracy())
 
-            with tf.GradientTape() as tape:
-                logits = model(x_batch, training=True)
-                loss = model.loss_fn(y_batch, logits)
-            grads = tape.gradient(loss, model.trainable_variables)
-            model.optimizer.apply_gradients(zip(grads, model.trainable_variables))
-            model.metric.update_state(y_batch, logits)
-
-        print(f'Epoch {epoch+1}/{num_epochs}: Loss={loss.numpy()}, Accuracy={model.metric.result().numpy()}')
-
-        manager.save()
-
-        model.metric.reset_states()
+    model.fit(x=training_data,
+              y=training_labels,
+              validation_data=(validation_data, validation_labels),
+              batch_size=25000,
+              epochs=12,
+              steps_per_epoch=len(training_data) // 25000,
+              verbose=2,
+              callbacks=tf.keras.callbacks.ModelCheckpoint('models\\model_1'),
+              use_multiprocessing=True)
 
 def visualize_model():
     model = CNNModel(K=40, L=20, M=10, N=100, classes=2, div=10, batch_size=25000, keep_prob=0.75, learning_rate=np.hstack((1e-3*np.ones(6),
