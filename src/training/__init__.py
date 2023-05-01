@@ -11,7 +11,8 @@ def execute_training(training_data_path, validation_data_path):
 
     model.compile(optimizer=tf.keras.optimizers.Adam(0.001), # Not same learning rate as paper
                   loss=tf.keras.losses.BinaryCrossentropy(),
-                  metrics=tf.keras.metrics.BinaryAccuracy())
+                  metrics=[tf.keras.metrics.BinaryAccuracy(),
+                           tf.keras.metrics.SparseCategoricalAccuracy()])
 
     batch_size = 5000
     training_data = DataGenerator(training_data_path, batch_size)
