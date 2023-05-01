@@ -19,13 +19,12 @@ def execute_training(training_data_path, validation_data_path):
 
     model.fit(x=training_data,
               validation_data=validation_data,
-              validation_freq=2,
+              validation_steps=len(validation_data),
               epochs=12,
               verbose=1,
-              callbacks=tf.keras.callbacks.ModelCheckpoint('models\\model_1'),
+              callbacks=tf.keras.callbacks.ModelCheckpoint('models\\epoch_{epoch}'),
               use_multiprocessing=True)
 
 def visualize_model():
     model = CNNModel(K=40, L=20, M=10, N=100, keep_prob=0.75)
-    model.summary()
-    #visualkeras.layered_view(model, to_file='model_architecture.png').show()
+    visualkeras.layered_view(model, to_file='model_architecture.png').show()
