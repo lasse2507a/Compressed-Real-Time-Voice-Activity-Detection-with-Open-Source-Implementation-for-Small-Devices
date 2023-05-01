@@ -1,38 +1,15 @@
 import os
-from concurrent.futures import ProcessPoolExecutor
 import numpy as np
 import tensorflow as tf
 import visualkeras
 from keras.utils import plot_model
 from training.cnn_model import CNNModel
-
-def load_data_parallel(path):
-    data = []
-    labels = []
-    num_files = 0
-    with ProcessPoolExecutor(max_workers=os.cpu_count() // 2) as executor:
-        files = [os.path.join(path, file) for file in os.listdir(path) if file.endswith(".npy")]
-        for batch in executor.map(load_data, files, chunksize=1000):
-            file_data, label = batch
-            data.extend(file_data)
-            labels.append(label)
-            num_files += 1
-            if num_files % 10000 == 0:
-                print(f"loaded {num_files} files out of {len(files)}")
-    data = np.array(data)
-    labels = np.array(labels)
-    print("data loaded successfully at path: " + str(path))
-    return data, labels
-
-def load_data(file):
-    file_data = np.load(file)
-    label = int(os.path.basename(file).split("_")[-2])
-    return np.reshape(file_data, (1, 40, 40)), label
-
+from training.load_data import LoadData
 
 def execute_training(training_data_path, validation_data_path):
-    training_data, training_labels = load_data_parallel(training_data_path)
-    validation_data, validation_labels = load_data_parallel(validation_data_path)
+    
+    training_data, training_labels = LoadData.load_data_parallel(training_data_path)
+    validation_data, validation_labels = LoadData.load_data_parallel(validation_data_path)
 
     model = CNNModel(K=40, L=20, M=10, N=100, keep_prob=0.75)
 
