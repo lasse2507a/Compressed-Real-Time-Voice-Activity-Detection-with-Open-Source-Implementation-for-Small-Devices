@@ -3,7 +3,6 @@ from queue import Queue
 import os
 import numpy as np
 import librosa
-#import matplotlib.pyplot as plt
 
 class Preprocessor:
     def __init__(self, samplerate, size):
@@ -45,12 +44,6 @@ class Preprocessor:
                 if frames_MFSC.full():
                     image_MFSC = np.concatenate(list(frames_MFSC.queue), axis=1)
                     np.save(f"{data_path}\\mfsc_window_{self.size}samples\\{file_name}_mfsc{j}.npy", image_MFSC)
-                    # plt.figure(figsize=(10, 4))
-                    # librosa.display.specshow(image_MFSC, y_coords=librosa.mel_frequencies(n_mels=40, fmin=300, fmax=8000), x_axis='time', y_axis='mel', cmap='coolwarm')
-                    # plt.colorbar()
-                    # plt.title('MFSC Features')
-                    # plt.tight_layout()
-                    # plt.savefig(f'data\\output\\preprocess_test\\images\\{file_name}_mfsc_example{j}')
                     j += 1
                     for _ in range(5):
                         frames_MFSC.get()

@@ -1,5 +1,6 @@
+import os
 import numpy as np
-import scipy as sp
+import librosa
 import matplotlib.pyplot as plt
 from data_processing.synthetic_data_generator import SineWaveGenerator
 from data_processing.data_handler import DataHandler
@@ -18,6 +19,16 @@ def preprocessing():
     preprocessor = Preprocessor(F_SAMPLING, WINDOW_SIZE)
     preprocessor.process('data\\output\\training_clip_len_17200samples')
     preprocessor.process('data\\output\\test_clip_len_17200samples')
+
+def plot_mfsc(data_path='data\\output\\preprocess_test\\mfsc_examples'):
+    for file in os.listdir(data_path):
+        image_MFSC = np.load(os.path.join(data_path, file))
+        plt.figure(figsize=(10, 4))
+        librosa.display.specshow(image_MFSC, y_coords=librosa.mel_frequencies(n_mels=40, fmin=300, fmax=8000), x_axis='time', y_axis='mel', cmap='coolwarm')
+        plt.colorbar()
+        plt.title('MFSC Features')
+        plt.tight_layout()
+        plt.savefig(f'data\\output\\preprocess_test\\images\\{file}_mfsc_example.png')
 
 def frequency_test():
     t = SineWaveGenerator(SIZE, F_SAMPLING).time()
