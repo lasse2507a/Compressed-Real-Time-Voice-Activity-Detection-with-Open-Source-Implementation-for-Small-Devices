@@ -9,20 +9,19 @@ from training.data_generator import DataGenerator
 def execute_training(training_data_path, validation_data_path):
     model = CNNModel(K=40, L=20, M=10, N=100, keep_prob=0.75)
 
-    model.compile(optimizer=tf.keras.optimizers.Adam(np.hstack((1e-3*np.ones(6),
-                                                                1e-4*np.ones(4),
-                                                                1e-5*np.ones(2)))),
+    model.compile(optimizer=tf.keras.optimizers.Adam(0.001), # Not same learning rate as paper
                   loss=tf.keras.losses.BinaryCrossentropy(),
                   metrics=tf.keras.metrics.BinaryAccuracy())
 
-
-    training_data = DataGenerator(training_data_path, 25000)
-    validation_data = DataGenerator(validation_data_path, 25000)
+    batch_size = 5000
+    training_data = DataGenerator(training_data_path, batch_size)
+    validation_data = DataGenerator(validation_data_path, batch_size)
 
     model.fit(x=training_data,
               validation_data=validation_data,
+              validation_freq=2,
               epochs=12,
-              verbose=2,
+              verbose=1,
               callbacks=tf.keras.callbacks.ModelCheckpoint('models\\model_1'),
               use_multiprocessing=True)
 
