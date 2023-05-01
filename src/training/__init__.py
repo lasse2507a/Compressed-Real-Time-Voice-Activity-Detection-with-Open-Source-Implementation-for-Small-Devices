@@ -14,20 +14,21 @@ def load_data_parallel(path):
         files = [os.path.join(path, file) for file in os.listdir(path) if file.endswith(".npy")]
         for batch in executor.map(load_data, files, chunksize=1000):
             file_data, label = batch
-            data.append(file_data)
+            data.extend(file_data)
             labels.append(label)
             num_files += 1
             if num_files % 10000 == 0:
-                print(f"processed {num_files} files out of {len(files)})")
-    data = np.concatenate(data, axis=0)
-    labels = np.concatenate(labels)
-    print("data generated successfully at path: " + str(path))
+                print(f"loaded {num_files} files out of {len(files)}")
+    data = np.array(data)
+    labels = np.array(labels)
+    print("data loaded successfully at path: " + str(path))
     return data, labels
 
 def load_data(file):
     file_data = np.load(file)
     label = int(os.path.basename(file).split("_")[-2])
-    return file_data, label
+    return np.reshape(file_data, (1, 40, 40)), label
+
 
 def execute_training(training_data_path, validation_data_path):
     training_data, training_labels = load_data_parallel(training_data_path)
