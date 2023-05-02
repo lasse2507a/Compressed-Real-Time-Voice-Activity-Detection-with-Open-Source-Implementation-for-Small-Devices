@@ -19,16 +19,16 @@ def execute_training(training_data_path='data\\output\\training_clip_len_17200sa
     validation_data = DataGenerator(validation_data_path, batch_size)
 
     def scheduler(epoch, lr):
-        if epoch == 50:
+        if epoch == 60:
             return lr * 0.1
-        elif epoch == 84:
+        elif epoch == 100:
             return lr * 0.1
         else:
             return lr
 
     model.fit(x=training_data,
               validation_data=validation_data,
-              epochs=100,
+              epochs=120,
               verbose=1,
               callbacks=[tf.keras.callbacks.ModelCheckpoint('models\\epoch_{epoch}'),
                          tf.keras.callbacks.TensorBoard(),
