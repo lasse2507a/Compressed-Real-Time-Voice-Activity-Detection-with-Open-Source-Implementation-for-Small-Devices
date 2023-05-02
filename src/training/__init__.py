@@ -18,7 +18,6 @@ def execute_training(training_data_path, validation_data_path):
 
     model.fit(x=training_data,
               validation_data=validation_data,
-              validation_steps=len(validation_data),
               epochs=12,
               verbose=1,
               callbacks=tf.keras.callbacks.ModelCheckpoint('models\\epoch_{epoch}'),
