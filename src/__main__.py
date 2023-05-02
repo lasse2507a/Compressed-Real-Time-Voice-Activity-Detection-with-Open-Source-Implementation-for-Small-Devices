@@ -12,5 +12,6 @@ if __name__ == '__main__':
     #preprocessing()
     #real_time_implementation()
     #visualize_model()
-    execute_training()
+    execute_training(training_data_path='data\\output\\training_1000_images',
+                     validation_data_path='data\\output\\validation_1000_images')
     #plot_mfsc()

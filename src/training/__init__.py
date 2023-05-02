@@ -1,29 +1,40 @@
 import tensorflow as tf
 import visualkeras
+import absl.logging
 from training.cnn_model import CNNModel
 from training.data_generator import DataGenerator
 
-
-
 def execute_training(training_data_path='data\\output\\training_clip_len_17200samples\\mfsc_window_400samples',
                      validation_data_path='data\\output\\validation_clip_len_17200samples\\mfsc_window_400samples'):
+    absl.logging.set_verbosity(absl.logging.ERROR)
+
     model = CNNModel(K=40, L=20, M=10, N=100, keep_prob=0.75)
 
     model.compile(optimizer=tf.keras.optimizers.Adam(0.001),
                   loss=tf.keras.losses.BinaryCrossentropy(),
-                  metrics=[tf.keras.metrics.BinaryAccuracy(),
-                           tf.keras.metrics.SparseCategoricalAccuracy()])
+                  metrics=tf.keras.metrics.BinaryAccuracy())
 
     batch_size = 2**7
     training_data = DataGenerator(training_data_path, batch_size)
     validation_data = DataGenerator(validation_data_path, batch_size)
 
+    def scheduler(epoch, lr):
+        if epoch < 50:
+            return lr
+        elif epoch < 84:
+            return lr * tf.math.exp(-0.1)
+        else:
+            return lr * tf.math.exp(-0.1)
+
     model.fit(x=training_data,
               validation_data=validation_data,
               epochs=100,
               verbose=1,
-              callbacks=tf.keras.callbacks.ModelCheckpoint('models\\epoch_{epoch}'),
-              use_multiprocessing=True)
+              callbacks=[tf.keras.callbacks.ModelCheckpoint('models\\epoch_{epoch}'),
+                         tf.keras.callbacks.TensorBoard(),
+                         tf.keras.callbacks.LearningRateScheduler(scheduler)],
+              use_multiprocessing=False)
+
 
 def visualize_model():
     model = tf.keras.Sequential([
