@@ -19,12 +19,12 @@ def execute_training(training_data_path='data\\output\\training_clip_len_17200sa
     validation_data = DataGenerator(validation_data_path, batch_size)
 
     def scheduler(epoch, lr):
-        if epoch < 50:
-            return lr
-        elif epoch < 84:
-            return lr * tf.math.exp(-0.1)
+        if epoch == 50:
+            return lr * 0.1
+        elif epoch == 84:
+            return lr * 0.1
         else:
-            return lr * tf.math.exp(-0.1)
+            return lr
 
     model.fit(x=training_data,
               validation_data=validation_data,
