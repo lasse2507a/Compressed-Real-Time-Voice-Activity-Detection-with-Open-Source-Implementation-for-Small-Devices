@@ -18,7 +18,7 @@ def data_generation():
 def preprocessing():
     preprocessor = Preprocessor(F_SAMPLING, WINDOW_SIZE)
     preprocessor.process('data\\output\\training_clip_len_17200samples')
-    preprocessor.process('data\\output\\test_clip_len_17200samples')
+    preprocessor.process('data\\output\\validation_clip_len_17200samples')
 
 def plot_mfsc(data_path='data\\output\\preprocess_test\\mfsc_examples'):
     for i, file in enumerate(os.listdir(data_path)):
