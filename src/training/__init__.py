@@ -4,6 +4,7 @@ from training.cnn_model import CNNModel
 from training.data_generator import DataGenerator
 
 def execute_training(training_data_path='data/output/training_clip_len_17200samples/mfsc_window_400samples',
+                     validation_data_path='data/output/validation_clip_len_17200samples/mfsc_window_400samples',
                      model_name = 'model_original'):
 
     #model = CNNModel(K=40, L=20, M=10, N=100, keep_prob=0.75)
@@ -24,6 +25,7 @@ def execute_training(training_data_path='data/output/training_clip_len_17200samp
 
     batch_size = 256
     training_data = DataGenerator(training_data_path, batch_size)
+    validation_data = DataGenerator(validation_data_path, batch_size)
 
     def scheduler(epoch, lr):
         if epoch == 60:
@@ -34,7 +36,7 @@ def execute_training(training_data_path='data/output/training_clip_len_17200samp
             return lr
 
     model.fit(x=training_data,
-              validation_split=0.05,
+              validation_data=validation_data,
               epochs=120,
               verbose=1,
               callbacks=[tf.keras.callbacks.ModelCheckpoint(f'models/{model_name}.h5',
