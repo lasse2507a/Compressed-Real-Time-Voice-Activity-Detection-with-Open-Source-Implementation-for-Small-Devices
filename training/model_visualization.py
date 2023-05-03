@@ -1,5 +1,5 @@
 import visualkeras
-from src.training.cnn_models import cnn_model_original
+from training.architecture_models import cnn_model_original
 
 
 def visualize_model():

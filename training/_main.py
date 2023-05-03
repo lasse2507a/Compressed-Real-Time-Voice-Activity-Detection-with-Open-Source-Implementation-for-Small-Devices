@@ -1,6 +1,6 @@
 import tensorflow as tf
-from src.training.generator import Generator
-from src.training.cnn_models import cnn_model_v2
+from training.generator import Generator
+from training.architecture_models import cnn_model_v2
 
 
 def execute_training():
