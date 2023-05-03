@@ -1,13 +1,14 @@
 import tensorflow as tf
 import visualkeras
 from training.cnn_model_original import cnn_model_original
+from training.cnn_model_v2 import cnn_model_v2
 from training.data_generator import DataGenerator
 
 def execute_training(training_data_path='data/output/training_clip_len_17200samples/mfsc_window_400samples',
                      validation_data_path='data/output/validation_clip_len_17200samples/mfsc_window_400samples',
                      model_name = 'model_original'):
 
-    model = cnn_model_original()
+    model = cnn_model_v2()
 
     model.summary()
 
