@@ -6,7 +6,7 @@ from training.architecture_models import cnn_model_v2, cnn_model_original
 def execute_training():
     training_data_path='data/output/training_clip_len_17200samples/mfsc_window_400samples'
     validation_data_path='data/output/validation_clip_len_17200samples/mfsc_window_400samples'
-    model_name = 'cnn_model_v2'
+    model_name = 'cnn_model_original'
     batch_size = 256
     epochs = 25
 
