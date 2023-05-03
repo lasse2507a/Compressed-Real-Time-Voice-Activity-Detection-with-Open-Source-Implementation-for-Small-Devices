@@ -1,8 +1,7 @@
 import tensorflow as tf
-import visualkeras
-from training.cnn_model_original import cnn_model_original
-from training.cnn_model_v2 import cnn_model_v2
-from training.data_generator import DataGenerator
+from src.training.generator import Generator
+from src.training.cnn_models import cnn_model_v2
+
 
 def execute_training():
     training_data_path='data/output/training_clip_len_17200samples/mfsc_window_400samples',
@@ -17,8 +16,8 @@ def execute_training():
                   loss=tf.keras.losses.BinaryCrossentropy(),
                   metrics=tf.keras.metrics.BinaryAccuracy())
 
-    training_data = DataGenerator(training_data_path, batch_size)
-    validation_data = DataGenerator(validation_data_path, batch_size)
+    training_data = Generator(training_data_path, batch_size)
+    validation_data = Generator(validation_data_path, batch_size)
 
     def scheduler(epoch, lr):
         if epoch == 1:
@@ -38,9 +37,6 @@ def execute_training():
                          tf.keras.callbacks.TensorBoard(),
                          tf.keras.callbacks.LearningRateScheduler(scheduler)],)
 
-def visualize_model():
-    model = cnn_model_original()
 
-    visualkeras.layered_view(model,
-                            legend=True,
-                            to_file='model.png').show()
+if __name__ == '__main__':
+    execute_training()

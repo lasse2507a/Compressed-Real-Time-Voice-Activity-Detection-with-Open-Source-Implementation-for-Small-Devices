@@ -3,6 +3,7 @@ import numpy as np
 import librosa
 import matplotlib.pyplot as plt
 
+
 def plot_mfsc(data_path, image_destination_path):
     """
     Plot MFSC (Mel-Frequency Spectral Coefficients) features for a given directory of files and save the output images.

@@ -4,6 +4,7 @@ import os
 import numpy as np
 import librosa
 
+
 class Preprocessor:
     def __init__(self, samplerate, size):
         """

@@ -3,6 +3,7 @@ import os
 import numpy as np
 import scipy.io.wavfile as wavfile
 
+
 class DataHandler:
     def __init__(self, samplerate):
         """

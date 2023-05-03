@@ -4,6 +4,7 @@ import numpy as np
 import librosa
 #import matplotlib.pyplot as plt
 
+
 class RealTimeMFSCPreprocessor:
     def __init__(self, samplerate, size):
         self.thread_stop_event = threading.Event()
@@ -14,6 +15,7 @@ class RealTimeMFSCPreprocessor:
         self.frames_MFSC = Queue(maxsize=40)
         self.images_MFSC = Queue()
         self.mel_size = 40
+
 
     def start_preprocessing(self, recordings):
         print("MFSC preprocessing started")
@@ -40,6 +42,7 @@ class RealTimeMFSCPreprocessor:
                 # plt.colorbar()
                 # plt.title('MFSC Features')
                 # plt.show()
+
 
     def stop_preprocessing(self):
         self.thread_stop_event.set()

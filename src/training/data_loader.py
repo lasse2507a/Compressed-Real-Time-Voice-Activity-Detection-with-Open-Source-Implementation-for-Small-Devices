@@ -2,9 +2,11 @@ import os
 from concurrent.futures import ProcessPoolExecutor
 import numpy as np
 
-class LoadData:
+
+class DataLoader:
     def __init__(self, path):
         self.path = path
+
 
     def load_data_parallel(self):
         data = []
@@ -23,6 +25,7 @@ class LoadData:
         labels = np.array(labels)
         print("data loaded successfully from path: " + str(self.path))
         return data, labels
+
 
     def _load_data(self, file):
         file_data = np.load(file)
