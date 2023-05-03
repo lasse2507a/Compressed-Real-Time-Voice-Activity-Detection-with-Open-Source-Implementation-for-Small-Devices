@@ -1,23 +1,15 @@
 import tensorflow as tf
 import visualkeras
-from training.cnn_model import CNNModel
+from training.cnn_model_original import cnn_model_original
 from training.data_generator import DataGenerator
 
 def execute_training(training_data_path='data/output/training_clip_len_17200samples/mfsc_window_400samples',
                      validation_data_path='data/output/validation_clip_len_17200samples/mfsc_window_400samples',
                      model_name = 'model_original'):
 
-    #model = CNNModel(K=40, L=20, M=10, N=100, keep_prob=0.75)
+    model = cnn_model_original()
 
-    model = tf.keras.Sequential([
-        tf.keras.layers.Conv2D(filters=40, kernel_size=[5,5], strides=(2,2), padding='SAME', activation='relu'),
-        tf.keras.layers.Conv2D(filters=20, kernel_size=[5,5], strides=(2,2), padding='SAME', activation='relu'),
-        tf.keras.layers.Conv2D(filters=10, kernel_size=[5,5], strides=(2,2), padding='SAME', activation='relu'),
-        tf.keras.layers.Flatten(),
-        tf.keras.layers.Dense(units=100, activation='relu'),
-        tf.keras.layers.Dropout(rate=0.75),
-        tf.keras.layers.Dense(units=1, activation='sigmoid')
-    ])
+    model.summary()
 
     model.compile(optimizer=tf.keras.optimizers.Adam(0.001),
                   loss=tf.keras.losses.BinaryCrossentropy(),
@@ -28,9 +20,9 @@ def execute_training(training_data_path='data/output/training_clip_len_17200samp
     validation_data = DataGenerator(validation_data_path, batch_size)
 
     def scheduler(epoch, lr):
-        if epoch == 60:
+        if epoch == 1:
             return lr * 0.1
-        elif epoch == 100:
+        elif epoch == 10:
             return lr * 0.1
         else:
             return lr
