@@ -47,3 +47,8 @@ class Preprocessor:
                     j += 1
                     for _ in range(5):
                         frames_MFSC.get()
+
+if __name__ == "__main__":
+    preprocessor = Preprocessor(samplerate=16000, size=400)
+    preprocessor.process('data\\output\\training_clip_len_17200samples')
+    preprocessor.process('data\\output\\validation_clip_len_17200samples')

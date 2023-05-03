@@ -5,6 +5,12 @@ import scipy.io.wavfile as wavfile
 
 class DataHandler:
     def __init__(self, samplerate):
+        """
+        Initializes a new DataHandler instance.
+
+        Args:
+            samplerate (int): The samplerate of the audio data.
+        """
         self.samplerate = samplerate
         self.names = []
         self.start_times = []
@@ -14,7 +20,13 @@ class DataHandler:
         self.indices_current_file = []
         self.is_same_file = False
 
-    def load_csv(self, path = 'data\\ava_speech_labels_v1.csv'):
+    def load_csv(self, path):
+        """
+        Loads metadata from a CSV file.
+
+        Args:
+            path (str): The path to the CSV file containing the metadata.
+        """
         with open(path, encoding = "utf-8") as csvfile:
             csv_reader = csv.reader(csvfile, delimiter = ',')
             for row in csv_reader:
@@ -24,6 +36,12 @@ class DataHandler:
                 self.labels.append(int(row[3]))
 
     def create_data(self, size):
+        """
+        Creates audio clips of a given size from the input data.
+
+        Args:
+            size (int): The size of the clips in samples.
+        """
         for k, start_time in enumerate(self.start_times):
             if ((self.end_times[k] - start_time) * self.samplerate) >= size:
                 self.indices_correct_size.append(k)
@@ -56,3 +74,8 @@ class DataHandler:
                     begin = end
             print(os.path.join('data\\input', file) + " indicies: " + str(len(self.indices_current_file)) + " total clips: " + str(total_number_of_clips))
             self.indices_current_file = []
+
+if __name__ == '__main__':
+    datahandler = DataHandler(samplerate = 16000)
+    datahandler.load_csv(path = 'data\\metadata\\ava_speech_labels_v1.csv')
+    datahandler.create_data(size = 400)
