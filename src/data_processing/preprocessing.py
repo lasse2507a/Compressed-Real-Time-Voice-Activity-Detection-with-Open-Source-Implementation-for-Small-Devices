@@ -6,6 +6,11 @@ import librosa
 
 class Preprocessor:
     def __init__(self, samplerate, size):
+        """
+        Initializes a Preprocessor instance.
+        Args: samplerate (int): Sampling rate of the audio.
+              size (int): Window size in samples.
+        """
         self.samplerate = samplerate
         self.size = size
         self.hop_length = int(size/2)
@@ -13,7 +18,12 @@ class Preprocessor:
         self.window = np.hanning(self.size)
         self.mel_size = 40
 
+
     def process(self, data_path):
+        """
+        Preprocesses audio fileslocated in the given directory using multithreading.
+        Args: data_path (str): Path to directory containing audio files.
+        """
         print("preprocessing started")
         os.makedirs(f"{data_path}\\mfsc_window_{self.size}samples", exist_ok = True)
 
@@ -23,7 +33,13 @@ class Preprocessor:
                     executor.submit(self._process_file, file, data_path)
         print("preprocessing finished")
 
+
     def _process_file(self, file, data_path):
+        """
+        Helper function to preprocess a single audio file.
+        Args: file (str): Name of the audio file to preprocess.
+              data_path (str): Path to directory containing audio files.
+        """
         file_name = file.replace(".wav", "")
         j = 1
         frames_MFSC = Queue(maxsize=40)
@@ -47,6 +63,7 @@ class Preprocessor:
                     j += 1
                     for _ in range(5):
                         frames_MFSC.get()
+
 
 if __name__ == "__main__":
     preprocessor = Preprocessor(samplerate=16000, size=400)
