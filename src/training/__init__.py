@@ -1,6 +1,6 @@
 import tensorflow as tf
-from training.generator import Generator
-from training.architecture_models import cnn_model_v2
+from src.training.generator import Generator
+from src.training.architecture_models import cnn_model_v2
 
 
 def execute_training():
@@ -36,7 +36,3 @@ def execute_training():
                                                             save_best_only=True,),
                          tf.keras.callbacks.TensorBoard(),
                          tf.keras.callbacks.LearningRateScheduler(scheduler)],)
-
-
-if __name__ == '__main__':
-    execute_training()
