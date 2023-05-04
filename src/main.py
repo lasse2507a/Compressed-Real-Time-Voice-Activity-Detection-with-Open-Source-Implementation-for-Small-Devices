@@ -5,6 +5,5 @@ import evaluation.__init__ as evaluation
 if __name__ == '__main__':
     #real_time_implementation.real_time_implementation()
     #training.execute_training()
-    y, y_ = evaluation.predictions()
-    evaluation.precision_recall_plot(y, y_)
-    evaluation.auc_roc(y, y_)
+    y, y_ = evaluation.predictions_webrtc()
+    evaluation.precision_recall_plot(y, y_, is_webrtc=True)
