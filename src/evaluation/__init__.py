@@ -1,5 +1,5 @@
-import os
 from concurrent.futures import ThreadPoolExecutor
+import os
 import librosa
 import tensorflow as tf
 import numpy as np
@@ -21,17 +21,29 @@ def predictions():
     return labels, preds
 
 
+# Normalisering af data
+# def load_file(file):
+#     file_data, _ = librosa.load(file, sr=16000, mono=True)
+#     scaler = MinMaxScaler()
+#     normalized_data = scaler.fit_transform(file_data.reshape(-1, 1)).reshape(-1)
+#     clips = np.frombuffer(normalized_data, dtype=np.int16).reshape(-1, 2)
+#     label = int(os.path.basename(file).split("_")[-1][0])
+#     return clips, label
+
+
+
 def load_file(file):
     file_data, _ = librosa.load(file, sr=16000, mono=True)
     clips = np.frombuffer(file_data, dtype=np.int16).reshape(-1, 2)
     label = int(os.path.basename(file).split("_")[-1][0])
     return clips, label
 
+
 def predictions_webrtc():
     labels = []
     path = "data/output/prediction_audio_clip_2/audio_clip_2_480samples"
     files = [os.path.join(path, file) for file in os.listdir(path) if file.endswith(".wav")]
-    preds = np.empty((4, len(files)))
+    preds = []
 
     batch_size = 100
     num_batches = int(np.floor(len(files) / batch_size))
@@ -44,36 +56,43 @@ def predictions_webrtc():
             labels += batch_labels
             clips = np.array(clips)
             clips = np.reshape(clips, (batch_size, -1))
-            print(f"batch {batch_idx+1}/{num_batches}: files loaded for prediction with WebRTC")
+            print(f'batch {batch_idx+1}/{num_batches}')
 
             model_webrtc = webrtcvad.Vad()
 
+            batch_preds = []
             for i in range(4):
                 model_webrtc.set_mode(i)
-                print(f"batch {batch_idx+1}/{num_batches}: WebRTC mode: {i}")
-                for j, clip in enumerate(clips):
-                    preds[i][batch_idx * batch_size + j] = model_webrtc.is_speech(buf=clip, sample_rate=16000)
+                mode_preds = [model_webrtc.is_speech(buf=clip, sample_rate=16000) for clip in clips]
+                batch_preds.append(mode_preds)
 
-    return labels, preds
+            preds.append(np.array(batch_preds))
+
+    return labels, np.concatenate(preds, axis=1)
 
 
 def precision_recall_plot(labels, preds, N=100, is_webrtc=False):
-    thresholds = np.linspace(0, 1, N)
     precisions = []
     recalls = []
 
     if is_webrtc:
-        for i in range(len(preds[0])):
-            cm = confusion_matrix(labels, preds[i], 0.5)
+        for i in range(4):
+            cm = confusion_matrix(labels, preds[i])
             precisions.append(precision(cm))
             recalls.append(recall(cm))
+            print(precision(cm))
+            print(recall(cm))
     else:
+        thresholds = np.linspace(0, 1, N)
         for threshold in thresholds:
             cm = confusion_matrix(labels, preds, threshold)
             precisions.append(precision(cm))
             recalls.append(recall(cm))
 
+
     plt.plot(recalls, precisions)
+    plt.xlim(0, 1)
+    plt.ylim(0, 1)
     plt.xlabel("Recall")
     plt.ylabel("Precision")
     plt.show()
