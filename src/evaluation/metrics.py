@@ -9,7 +9,7 @@ def accuracy(confusion_matrix):
 def precision(confusion_matrix):
     tp = confusion_matrix['true_positives']
     fp = confusion_matrix['false_positives']
-    return tp / (tp +fp)
+    return tp / (tp + fp)
 
 
 def recall(confusion_matrix):

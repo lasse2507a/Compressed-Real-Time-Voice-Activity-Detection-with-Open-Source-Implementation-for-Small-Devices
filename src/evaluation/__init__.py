@@ -12,10 +12,10 @@ from evaluation.metrics import *
 
 
 def predictions():
-    data_loader_mfsc = DataLoader("data\\output\\prediction_audio_clip_2\\mfsc_400samples")
+    data_loader_mfsc = DataLoader("data/output/prediction_audio_clip_2/mfsc_400samples")
     data, labels = data_loader_mfsc.load_data_parallel()
 
-    model = tf.keras.models.load_model("models\\cnn_model_original_25(12,8,5).h5")
+    model = tf.keras.models.load_model("models/cnn_model_original_25(12,8,5).h5")
     preds = model.predict(x=data, verbose=1)
 
     return labels, preds
@@ -29,7 +29,6 @@ def predictions():
 #     clips = np.frombuffer(normalized_data, dtype=np.int16).reshape(-1, 2)
 #     label = int(os.path.basename(file).split("_")[-1][0])
 #     return clips, label
-
 
 
 def load_file(file):
@@ -48,6 +47,8 @@ def predictions_webrtc():
     batch_size = 100
     num_batches = int(np.floor(len(files) / batch_size))
 
+    model_webrtc = webrtcvad.Vad()
+
     with ThreadPoolExecutor() as executor:
         for batch_idx in range(num_batches):
             batch_files = files[batch_idx * batch_size:(batch_idx + 1) * batch_size]
@@ -57,8 +58,6 @@ def predictions_webrtc():
             clips = np.array(clips)
             clips = np.reshape(clips, (batch_size, -1))
             print(f'batch {batch_idx+1}/{num_batches}')
-
-            model_webrtc = webrtcvad.Vad()
 
             batch_preds = []
             for i in range(4):
@@ -71,7 +70,7 @@ def predictions_webrtc():
     return labels, np.concatenate(preds, axis=1)
 
 
-def precision_recall_plot(labels, preds, N=100, is_webrtc=False):
+def precision_recall_plot(labels, preds, N=200, is_webrtc=False):
     precisions = []
     recalls = []
 
@@ -80,25 +79,18 @@ def precision_recall_plot(labels, preds, N=100, is_webrtc=False):
             cm = confusion_matrix(labels, preds[i])
             precisions.append(precision(cm))
             recalls.append(recall(cm))
-            print(precision(cm))
-            print(recall(cm))
     else:
-        thresholds = np.linspace(0, 1, N)
+        thresholds = np.linspace(0, 1, N, endpoint=True)
         for threshold in thresholds:
             cm = confusion_matrix(labels, preds, threshold)
             precisions.append(precision(cm))
             recalls.append(recall(cm))
+            print(threshold)
+
+    return recalls, precisions
 
 
-    plt.plot(recalls, precisions)
-    plt.xlim(0, 1)
-    plt.ylim(0, 1)
-    plt.xlabel("Recall")
-    plt.ylabel("Precision")
-    plt.show()
-
-
-def auc_roc(labels, preds, N=100):
+def auc_roc(labels, preds, N=500):
     thresholds = np.linspace(0, 1, N)
     tpr = []
     fpr = []
@@ -108,9 +100,4 @@ def auc_roc(labels, preds, N=100):
         tpr.append(recall(cm))
         fpr.append(fp_rate(cm))
 
-    plt.plot(fpr, tpr)
-    plt.xlabel("FPR")
-    plt.ylabel("TPR")
-    auc_value = roc_auc_score(labels, preds)
-    plt.title(f"ROC Curve (AUC = {auc_value:.4f})")
-    plt.show()
+    return fpr, tpr
