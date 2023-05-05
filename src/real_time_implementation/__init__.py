@@ -25,10 +25,10 @@ def real_time_implementation():
 
     recorder.stop_recording()
     preprocessor.stop_preprocessing()
-    model.stop()
+    model.stop_inference()
     thread_recorder.join()
     thread_preprocessor.join()
-    model.join()
+    thread_model.join()
 
 
 if __name__ == '__main__':
