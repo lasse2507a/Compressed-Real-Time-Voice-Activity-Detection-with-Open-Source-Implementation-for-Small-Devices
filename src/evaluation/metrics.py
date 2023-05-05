@@ -1,63 +1,91 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from sklearn.metrics import roc_auc_score
-from evaluation.confusion_matrix import calculate_confusion_matrix
+from sklearn.metrics import precision_recall_curve, roc_curve, auc
 
 
-def precision_recall_plot(labels, preds, N=200, is_webrtc=False):
-    precisions = []
-    recalls = []
-
-    if is_webrtc:
-        for i in range(4):
-            cm = calculate_confusion_matrix(labels, preds[i])
-            precisions.append(precision(cm))
-            recalls.append(recall(cm))
-    else:
-        thresholds = np.linspace(0, 1, N, endpoint=False)
-        for threshold in thresholds:
-            cm = calculate_confusion_matrix(labels, preds, threshold)
-            precisions.append(precision(cm))
-            recalls.append(recall(cm))
-
-    #recalls1, precisions1 = precision_recall_curve(original_y, original_y_)
-    # recalls2, precisions2 = precision_recall_curve(v2_y, v2_y_)
-
-    # plt.plot(recalls1, precisions1)
-    # plt.plot(recalls2, precisions2)
-    # #plt.xlim(0, 1.05)
-    # #plt.ylim(0, 1.05)
-    # plt.xlabel("Recall")
-    # plt.ylabel("Precision")
-    # plt.show()
-
-    return recalls, precisions
-
-
-def auc_roc_plot(labels_list, preds_list, model_names, N=200):
-    plt.figure(figsize=(8,8))
-    thresholds = np.linspace(0, 1, N)
+def precision_recall_plot(labels_list, preds_list, model_names):
+    plt.figure(figsize=(8, 8))
 
     for i, (labels, preds) in enumerate(zip(labels_list, preds_list)):
-        tpr = []
-        fpr = []
-        for threshold in thresholds:
-            cm = calculate_confusion_matrix(labels, preds, threshold)
-            tpr.append(recall(cm))
-            fpr.append(fp_rate(cm))
+        if model_names[i] == 'WebRTC VAD':
+            precisions = []
+            recalls = []
+            for i in range(4):
+                cm = calculate_confusion_matrix(labels, preds[i])
+                precisions.append(precision(cm))
+                recalls.append(recall(cm))
+        else:
+            precisions, recalls, _ = precision_recall_curve(labels, preds)
+            pr_auc = auc(recalls, precisions)
 
-        auc_value = roc_auc_score(labels, preds)
-
-        plt.plot(fpr, tpr, label=f'{model_names[i]} | AUC = {auc_value:.4f}')
+        plt.plot(recalls, precisions, label=f'{model_names[i]} (AP = {pr_auc:.4f})', linewidth=2)
 
     plt.gca().set_aspect('equal', adjustable='box')
-    plt.title("ROC Curves", fontsize=16)
-    plt.xlabel("FPR", fontsize=12)
-    plt.ylabel("TPR", fontsize=12)
-    plt.legend(fontsize=12)
+    plt.title("Precision-Recall Curves")
+    plt.xlabel("Recall")
+    plt.ylabel("Precision")
+    plt.legend()
+    plt.grid()
+    plt.tight_layout()
+    plt.savefig('images/precision_recall_curves.png', dpi=300)
+
+
+def auc_roc_plot(labels_list, preds_list, model_names):
+    plt.figure(figsize=(8,8))
+
+    for i, (labels, preds) in enumerate(zip(labels_list, preds_list)):
+        if model_names[i] == 'WebRTC VAD':
+            tpr = []
+            fpr = []
+            for i in range(4):
+                cm = calculate_confusion_matrix(labels, preds[i])
+                tpr.append(recall(cm))
+                fpr.append(fp_rate(cm))
+        else:
+            fpr, tpr, _ = roc_curve(labels, preds)
+            auc_value = auc(fpr, tpr)
+
+        plt.plot(fpr, tpr, label=f'{model_names[i]} (AUC = {auc_value:.4f})', linewidth=2)
+
+    plt.gca().set_aspect('equal', adjustable='box')
+    plt.title("ROC Curves")
+    plt.xlabel("FPR")
+    plt.ylabel("TPR")
+    plt.legend()
     plt.grid()
     plt.tight_layout()
     plt.savefig('images/roc_curves.png', dpi=300)
+
+
+def calculate_confusion_matrix(labels, predictions, threshold=0.5):
+    labels = np.array(labels, dtype=np.float32)
+    predictions = np.array(predictions, dtype=np.float32)
+
+    for i, prediction in enumerate(predictions):
+        if prediction >= threshold:
+            predictions[i] = 1
+        else:
+            predictions[i] = 0
+
+    tp = 0
+    tn = 0
+    fp = 0
+    fn = 0
+
+    for i, prediction in enumerate(predictions):
+        if prediction == 1 and labels[i] == 1:
+            tp += 1
+        elif prediction == 0 and labels[i] == 0:
+            tn += 1
+        elif prediction == 1 and labels[i] == 0:
+            fp += 1
+        elif prediction == 0 and labels[i] == 1:
+            fn += 1
+
+    return {'true_positives': tp,
+            'true_negatives': tn,
+            'false_positives': fp,
+            'false_negatives': fn}
 
 
 def accuracy(confusion_matrix):
@@ -71,7 +99,10 @@ def accuracy(confusion_matrix):
 def precision(confusion_matrix):
     tp = confusion_matrix['true_positives']
     fp = confusion_matrix['false_positives']
-    return tp / (tp + fp)
+    if tp + fp == 0:
+        return 1
+    else:
+        return tp / (tp + fp)
 
 
 def recall(confusion_matrix):
