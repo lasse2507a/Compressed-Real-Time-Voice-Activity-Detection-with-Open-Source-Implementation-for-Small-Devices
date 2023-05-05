@@ -8,7 +8,7 @@ def execute_training():
     validation_data_path='data/output/validation_clip_len_17200samples/mfsc_window_400samples'
     model_name = 'cnn_model_v3_25(12,8,5)'
     batch_size = 256
-    epochs = 25
+    epochs = 32
 
     model = cnn_model_v3()
     model.summary()
@@ -20,9 +20,9 @@ def execute_training():
     validation_data = Generator(validation_data_path, batch_size)
 
     def scheduler(epoch, lr):
-        if epoch == 12:
+        if epoch == 20:
             return lr * 0.1
-        elif epoch == 20:
+        elif epoch == 27:
             return lr * 0.1
         else:
             return lr
