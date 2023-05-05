@@ -6,11 +6,11 @@ from training.architecture_models import cnn_model_v2, cnn_model_original
 def execute_training():
     training_data_path='data/output/training_clip_len_17200samples/mfsc_window_400samples'
     validation_data_path='data/output/validation_clip_len_17200samples/mfsc_window_400samples'
-    model_name = 'cnn_model_original'
+    model_name = 'cnn_model_v2_25(12,8,5)'
     batch_size = 256
     epochs = 25
 
-    model = cnn_model_original()
+    model = cnn_model_v2()
     model.summary()
     model.compile(optimizer=tf.keras.optimizers.Adam(0.001),
                   loss=tf.keras.losses.BinaryCrossentropy(),
