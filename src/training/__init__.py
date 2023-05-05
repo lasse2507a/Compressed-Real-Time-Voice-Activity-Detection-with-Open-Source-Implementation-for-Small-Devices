@@ -10,7 +10,7 @@ def execute_training():
     batch_size = 256
     epochs = 25
 
-    model = cnn_model_v3()
+    model = cnn_model_v4()
     model.summary()
     model.compile(optimizer=tf.keras.optimizers.Adam(0.001),
                   loss=tf.keras.losses.BinaryCrossentropy(),
