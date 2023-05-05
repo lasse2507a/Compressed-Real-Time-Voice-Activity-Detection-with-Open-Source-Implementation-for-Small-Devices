@@ -22,40 +22,42 @@ def execute_evaluation():
     # plt.legend()
     # plt.show()
 
-    y1, y1_ = predictions()
+    original_y, original_y_ = predictions('cnn_model_original_25(12,8,5).h5')
+    v2_y, v2_y_ = predictions('cnn_model_v2_25(12,8,5).h5')
 
-    y2 = np.load('data/output/prediction_audio_clip_2/silero_labels.npy')
-    y2_ = np.load('data/output/prediction_audio_clip_2/silero_preds.npy')
+    #silero_y = np.load('data/output/prediction_audio_clip_2/silero_labels.npy')
+    #silero_y_ = np.load('data/output/prediction_audio_clip_2/silero_preds.npy')
 
-    fpr1, tpr1 = auc_roc(y1, y1_)
-    fpr2, tpr2 = auc_roc(y2, y2_)
+    # fpr1, tpr1 = auc_roc(original_y, original_y_)
+    # fpr2, tpr2 = auc_roc(v2_y, v2_y_)
 
-    plt.plot(fpr1, tpr1)
-    plt.plot(fpr2, tpr2)
-    plt.xlabel("FPR")
-    plt.ylabel("TPR")
-    auc_value1 = roc_auc_score(y1, y1_)
-    auc_value2 = roc_auc_score(y2, y2_)
-    plt.title(f"ROC Curve (AUC = {auc_value1:.4f}, AUC = {auc_value2:.4f})")
-    plt.show()
-
-    # recalls1, precisions1 = precision_recall_plot(y1, y1_)
-    # recalls2, precisions2 = precision_recall_plot(y2, y2_)
-
-    # plt.plot(recalls1, precisions1)
-    # plt.plot(recalls2, precisions2)
-    # #plt.xlim(0, 1.05)
-    # #plt.ylim(0, 1.05)
-    # plt.xlabel("Recall")
-    # plt.ylabel("Precision")
+    # plt.plot(fpr1, tpr1)
+    # plt.plot(fpr2, tpr2)
+    # plt.xlabel("FPR")
+    # plt.ylabel("TPR")
+    # plt.legend(["Original", "v2"])
+    # auc_value1 = roc_auc_score(original_y, original_y_)
+    # auc_value2 = roc_auc_score(v2_y, v2_y_)
+    # plt.title(f"ROC Curve (AUC = {auc_value1:.4f}, AUC = {auc_value2:.4f})")
     # plt.show()
 
+    recalls1, precisions1 = precision_recall_plot(original_y, original_y_)
+    recalls2, precisions2 = precision_recall_plot(v2_y, v2_y_)
 
-def predictions():
+    plt.plot(recalls1, precisions1)
+    plt.plot(recalls2, precisions2)
+    #plt.xlim(0, 1.05)
+    #plt.ylim(0, 1.05)
+    plt.xlabel("Recall")
+    plt.ylabel("Precision")
+    plt.show()
+
+
+def predictions(model_name):
     data_loader_mfsc = DataLoader("data/output/prediction_audio_clip_2/mfsc_400samples")
     data, labels = data_loader_mfsc.load_data_parallel()
 
-    model = tf.keras.models.load_model("models/cnn_model_original_25(12,8,5).h5")
+    model = tf.keras.models.load_model(f"models/{model_name}")
     preds = model.predict(x=data, verbose=1)
 
     return labels, preds
@@ -125,7 +127,6 @@ def precision_recall_plot(labels, preds, N=200, is_webrtc=False):
             cm = confusion_matrix(labels, preds, threshold)
             precisions.append(precision(cm))
             recalls.append(recall(cm))
-            print(threshold)
 
     return recalls, precisions
 
