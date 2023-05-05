@@ -23,34 +23,34 @@ def execute_evaluation():
     # plt.show()
 
     original_y, original_y_ = predictions('cnn_model_original_25(12,8,5).h5')
-    v2_y, v2_y_ = predictions('cnn_model_v2_25(12,8,5).h5')
+    v2_y, v2_y_ = predictions('cnn_model_v3_32(20,7,5).h5')
 
     #silero_y = np.load('data/output/prediction_audio_clip_2/silero_labels.npy')
     #silero_y_ = np.load('data/output/prediction_audio_clip_2/silero_preds.npy')
 
-    # fpr1, tpr1 = auc_roc(original_y, original_y_)
-    # fpr2, tpr2 = auc_roc(v2_y, v2_y_)
+    fpr1, tpr1 = auc_roc(original_y, original_y_)
+    fpr2, tpr2 = auc_roc(v2_y, v2_y_)
 
-    # plt.plot(fpr1, tpr1)
-    # plt.plot(fpr2, tpr2)
-    # plt.xlabel("FPR")
-    # plt.ylabel("TPR")
-    # plt.legend(["Original", "v2"])
-    # auc_value1 = roc_auc_score(original_y, original_y_)
-    # auc_value2 = roc_auc_score(v2_y, v2_y_)
-    # plt.title(f"ROC Curve (AUC = {auc_value1:.4f}, AUC = {auc_value2:.4f})")
-    # plt.show()
-
-    recalls1, precisions1 = precision_recall_plot(original_y, original_y_)
-    recalls2, precisions2 = precision_recall_plot(v2_y, v2_y_)
-
-    plt.plot(recalls1, precisions1)
-    plt.plot(recalls2, precisions2)
-    #plt.xlim(0, 1.05)
-    #plt.ylim(0, 1.05)
-    plt.xlabel("Recall")
-    plt.ylabel("Precision")
+    plt.plot(fpr1, tpr1)
+    plt.plot(fpr2, tpr2)
+    plt.xlabel("FPR")
+    plt.ylabel("TPR")
+    plt.legend(["Original", "v2"])
+    auc_value1 = roc_auc_score(original_y, original_y_)
+    auc_value2 = roc_auc_score(v2_y, v2_y_)
+    plt.title(f"ROC Curve (AUC = {auc_value1:.4f}, AUC = {auc_value2:.4f})")
     plt.show()
+
+    # recalls1, precisions1 = precision_recall_plot(original_y, original_y_)
+    # recalls2, precisions2 = precision_recall_plot(v2_y, v2_y_)
+
+    # plt.plot(recalls1, precisions1)
+    # plt.plot(recalls2, precisions2)
+    # #plt.xlim(0, 1.05)
+    # #plt.ylim(0, 1.05)
+    # plt.xlabel("Recall")
+    # plt.ylabel("Precision")
+    # plt.show()
 
 
 def predictions(model_name):
