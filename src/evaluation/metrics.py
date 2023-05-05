@@ -48,7 +48,7 @@ def auc_roc_plot(labels_list, preds_list, model_names, N=200):
 
         auc_value = roc_auc_score(labels, preds)
 
-        plt.plot(fpr, tpr, label=f'{model_names[i]} - AUC = {auc_value:.4}', linestyle='--')
+        plt.plot(fpr, tpr, label=f'{model_names[i]} | AUC = {auc_value:.4f}')
 
     plt.gca().set_aspect('equal', adjustable='box')
     plt.title("ROC Curves")
@@ -56,6 +56,7 @@ def auc_roc_plot(labels_list, preds_list, model_names, N=200):
     plt.ylabel("TPR")
     plt.legend()
     plt.grid()
+    plt.tight_layout()
     plt.savefig('images/roc_curves.png', dpi=300)
 
 

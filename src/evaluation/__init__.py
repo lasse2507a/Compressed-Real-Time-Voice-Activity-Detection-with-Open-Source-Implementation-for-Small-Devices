@@ -15,9 +15,9 @@ def execute_evaluation():
     labels_silero = np.load('data/output/prediction_audio_clip_2/other_model_predictions/silero_labels17200.npy')
     preds_silero = np.load('data/output/prediction_audio_clip_2/other_model_predictions/silero_preds17200.npy')
 
-    labels_list = [labels_original, labels_model_v4, labels_silero]
-    preds_list = [preds_original, preds_model_v4, preds_silero]
-    model_names = ['Original CNN model', 'CNN model v4', 'Silero model']
+    labels_list = [labels_model_v4, labels_original, labels_silero]
+    preds_list = [preds_model_v4, preds_original, preds_silero]
+    model_names = ['CNN model v4', 'Original CNN model', 'Silero model']
 
     auc_roc_plot(labels_list, preds_list, model_names)
 
