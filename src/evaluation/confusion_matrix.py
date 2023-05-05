@@ -1,7 +1,7 @@
 import numpy as np
 
 
-def confusion_matrix(labels, predictions, threshold=0.5):
+def calculate_confusion_matrix(labels, predictions, threshold=0.5):
     labels = np.array(labels, dtype=np.float32)
     predictions = np.array(predictions, dtype=np.float32)
 
