@@ -35,11 +35,11 @@ class GUI(tk.Tk):
         else:
             self.color_label.config(bg="red", text="Negative")
 
-        self.data.get(pred)
+        self.data.put(pred)
         if self.data.full():
             self.data.get()
         self.ax.clear()
-        self.ax.plot(self.data)
+        self.ax.plot(self.data.queue)
         self.canvas.draw()
 
         self.update()
