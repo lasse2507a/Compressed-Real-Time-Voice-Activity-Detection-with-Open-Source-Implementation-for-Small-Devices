@@ -22,10 +22,6 @@ class RealTimeInferenceLite:
             self.interpreter.allocate_tensors()
             self.interpreter.invoke()
             prediction = self.interpreter.get_tensor(self.output_details['index']).ravel()
-            if prediction >= 0.5:
-                print('SPEECH')
-            else:
-                print('NO-SPEECH')
             self.preds.put(prediction)
 
 
