@@ -1,6 +1,7 @@
 import threading
 from queue import Queue
 import time
+import psutil
 from real_time_implementation.audio_recorder import AudioRecorder
 from real_time_implementation.preprocessing import RealTimeMFSCPreprocessor
 from real_time_implementation.inference_lite import RealTimeInferenceLite
@@ -32,6 +33,11 @@ def real_time_implementation():
 
     try:
         while True:
+            cpu_percent = psutil.cpu_percent(interval=1)
+            mem = psutil.virtual_memory()
+            print(f"CPU usage: {cpu_percent}% | Memory usage: {mem.used/1024/1024} MB")
+
+
             gui.update_color(preds)
             time.sleep(0.01)
 
