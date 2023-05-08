@@ -2,9 +2,9 @@ import threading
 from queue import Queue
 import time
 from real_time_implementation.audio_recorder import AudioRecorder
-from real_time_implementation.real_time_preprocessing import RealTimeMFSCPreprocessor
-from real_time_implementation.real_time_inference_lite import RealTimeInferenceLite
-from real_time_implementation.gui_color import GUI
+from real_time_implementation.preprocessing import RealTimeMFSCPreprocessor
+from real_time_implementation.inference_lite import RealTimeInferenceLite
+from real_time_implementation.gui import GUI
 
 F_SAMPLING = 16000
 SIZE = 200
