@@ -3,8 +3,10 @@ from queue import Queue
 import time
 from real_time_implementation.audio_recorder import AudioRecorder
 from real_time_implementation.preprocessing import RealTimeMFSCPreprocessor
-from real_time_implementation.inference_lite import RealTimeInferenceLite
-from real_time_implementation.gui import GUI
+#from real_time_implementation.inference_lite import RealTimeInferenceLite
+from real_time_implementation.inference import RealTimeInference
+from real_time_implementation.gui_plot import GUIPlot
+#from real_time_implementation.gui_color import GUIColor
 
 F_SAMPLING = 16000
 SIZE = 200
@@ -13,9 +15,11 @@ SIZE = 200
 def real_time_implementation():
     recorder = AudioRecorder(F_SAMPLING, SIZE)
     preprocessor = RealTimeMFSCPreprocessor(F_SAMPLING, SIZE)
-    model = RealTimeInferenceLite('cnn_model_v4_25(12,8,5).tflite')
+    #model = RealTimeInferenceLite('cnn_model_v4_25(12,8,5).tflite')
+    model = RealTimeInference('cnn_model_original_25(12,8,5).h5')
     preds = Queue()
-    gui = GUI(0.5)
+    gui = GUIPlot(0.5)
+    #gui = GUIColor(0.5)
 
     thread_recorder = threading.Thread(target=recorder.start_recording, daemon=True)
     thread_preprocessor = threading.Thread(target=preprocessor.start_preprocessing, args=(recorder.recordings,), daemon=True)
@@ -25,14 +29,9 @@ def real_time_implementation():
     thread_preprocessor.start()
     thread_model.start()
 
-    plot_counter = 0
     try:
         while True:
             gui.update_color(preds)
-            plot_counter +=1
-            if plot_counter == 10:
-                plot_counter = 0
-                gui.update_plot()
             time.sleep(0.01)
 
     except KeyboardInterrupt:
