@@ -15,7 +15,7 @@ def real_time_implementation():
     preprocessor = RealTimeMFSCPreprocessor(F_SAMPLING, SIZE)
     model = RealTimeInferenceLite('cnn_model_v4_25(12,8,5).tflite')
     preds = Queue()
-    gui = GUI(preds)
+    gui = GUI(preds, 0.5)
 
     thread_recorder = threading.Thread(target=recorder.start_recording, daemon=True)
     thread_preprocessor = threading.Thread(target=preprocessor.start_preprocessing, args=(recorder.recordings,), daemon=True)
