@@ -31,12 +31,19 @@ def real_time_implementation():
     thread_preprocessor.start()
     thread_model.start()
 
+    usage_counter = 0
+    cpu_percent = 0
+    mem = 0
     try:
         while True:
-            cpu_percent = psutil.cpu_percent(interval=1)
-            mem = psutil.virtual_memory()
-            print(f"CPU usage: {cpu_percent}% | Memory usage: {mem.used/1024/1024} MB")
-
+            usage_counter += 1
+            cpu_percent += psutil.cpu_percent()
+            mem += psutil.virtual_memory().used/1024/1024/100
+            if usage_counter == 100:
+                print(f"CPU usage: {cpu_percent/100:.2f}% | Memory usage: {mem:.2f} MB")
+                usage_counter = 0
+                cpu_percent = 0
+                mem = 0
 
             gui.update_color(preds)
             time.sleep(0.01)
