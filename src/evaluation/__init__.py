@@ -16,9 +16,9 @@ def execute_evaluation():
     labels_silero = np.load('data/output/prediction_audio_clip_2/other_model_predictions/silero_labels17200.npy')
     preds_silero = np.load('data/output/prediction_audio_clip_2/other_model_predictions/silero_preds17200.npy')
 
-    labels_list = [labels_model_v4, labels_original, labels_silero, labels_model_v4_lite,labels_model_v4_latency_lite, labels_model_v4_size_lite]
-    preds_list = [preds_model_v4, preds_original, preds_silero, preds_model_v4_lite, preds_model_v4_latency_lite, preds_model_v4_size_lite]
-    model_names = ['Modified VAD', 'Original VAD', 'Silero VAD', 'Modified VAD Lite', 'Modified VAD Latency Lite', 'Modified VAD Size Lite']
+    labels_list = [labels_model_v4, labels_original, labels_silero, labels_model_v4_lite]
+    preds_list = [preds_model_v4, preds_original, preds_silero, preds_model_v4_lite]
+    model_names = ['Modified VAD', 'Original VAD', 'Silero VAD', 'Modified VAD Lite']
 
     precision_recall_plot(labels_list, preds_list, model_names)
     auc_roc_plot(labels_list, preds_list, model_names)
