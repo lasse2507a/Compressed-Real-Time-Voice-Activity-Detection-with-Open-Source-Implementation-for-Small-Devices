@@ -31,7 +31,6 @@ class RealTimeMFSCPreprocessor:
                                                                     center=False, n_mels=self.mel_size, fmin=300, fmax=8000)
             self.frames_MFSC.put(librosa.power_to_db(melspectrogram, ref=np.max))
             if self.frames_MFSC.full():
-                print("MFSC preprocessing queue full")
                 image_MFSC = np.concatenate(list(self.frames_MFSC.queue), axis=1)
                 self.images_MFSC.put(image_MFSC)
                 for _ in range(5):
