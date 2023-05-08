@@ -25,10 +25,16 @@ def real_time_implementation():
     thread_preprocessor.start()
     thread_model.start()
 
+    plot_counter = 0
     try:
         while True:
             gui.update_color(preds)
+            plot_counter +=1
+            if plot_counter == 10:
+                plot_counter = 0
+                gui.update_plot()
             time.sleep(0.01)
+
     except KeyboardInterrupt:
         recorder.stop_recording()
         preprocessor.stop_preprocessing()
