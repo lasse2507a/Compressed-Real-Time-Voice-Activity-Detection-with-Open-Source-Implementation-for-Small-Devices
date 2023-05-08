@@ -3,23 +3,24 @@ from queue import Queue
 import time
 from real_time_implementation.audio_recorder import AudioRecorder
 from real_time_implementation.preprocessing import RealTimeMFSCPreprocessor
-#from real_time_implementation.inference_lite import RealTimeInferenceLite
-from real_time_implementation.inference import RealTimeInference
+from real_time_implementation.inference_lite import RealTimeInferenceLite
+#from real_time_implementation.inference import RealTimeInference
 from real_time_implementation.gui_plot import GUIPlot
 #from real_time_implementation.gui_color import GUIColor
 
 F_SAMPLING = 16000
 SIZE = 200
+THRESHOLD = 0.5
 
 
 def real_time_implementation():
     recorder = AudioRecorder(F_SAMPLING, SIZE)
     preprocessor = RealTimeMFSCPreprocessor(F_SAMPLING, SIZE)
-    #model = RealTimeInferenceLite('cnn_model_v4_25(12,8,5).tflite')
-    model = RealTimeInference('cnn_model_original_25(12,8,5).h5')
+    model = RealTimeInferenceLite('cnn_model_v4_25(12,8,5).tflite')
+    #model = RealTimeInference('cnn_model_original_25(12,8,5).h5')
     preds = Queue()
-    gui = GUIPlot(0.5)
-    #gui = GUIColor(0.5)
+    gui = GUIPlot(THRESHOLD)
+    #gui = GUIColor(THRESHOLD)
 
     thread_recorder = threading.Thread(target=recorder.start_recording, daemon=True)
     thread_preprocessor = threading.Thread(target=preprocessor.start_preprocessing, args=(recorder.recordings,), daemon=True)
