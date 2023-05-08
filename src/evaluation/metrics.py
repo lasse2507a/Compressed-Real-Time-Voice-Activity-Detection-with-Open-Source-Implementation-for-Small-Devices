@@ -16,9 +16,9 @@ def precision_recall_plot(labels_list, preds_list, model_names):
                 recalls.append(recall(cm))
         else:
             precisions, recalls, _ = precision_recall_curve(labels, preds)
-            pr_auc = auc(recalls, precisions)
+            pr_ap = auc(recalls, precisions)
 
-        plt.plot(recalls, precisions, label=f'{model_names[i]} (AP = {pr_auc:.4f})', linewidth=2)
+        plt.plot(recalls, precisions, label=f'{model_names[i]} (AP = {pr_ap:.4f})', linewidth=2)
 
     plt.gca().set_aspect('equal', adjustable='box')
     plt.title("Precision-Recall Curves")
