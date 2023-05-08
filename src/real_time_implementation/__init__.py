@@ -20,20 +20,20 @@ def real_time_implementation():
     thread_recorder = threading.Thread(target=recorder.start_recording, daemon=True)
     thread_preprocessor = threading.Thread(target=preprocessor.start_preprocessing, args=(recorder.recordings,), daemon=True)
     thread_model = threading.Thread(target=model.start_inference, args=(preprocessor.images_MFSC,), daemon=True)
-    thread_gui = threading.Thread(target=gui.mainloop)
 
     thread_recorder.start()
     thread_preprocessor.start()
     thread_model.start()
-    thread_gui.start()
 
-    time.sleep(100)
+    try:
+        while True:
+            gui.update()
+            time.sleep(0.01)
+    except KeyboardInterrupt:
+        recorder.stop_recording()
+        preprocessor.stop_preprocessing()
+        model.stop_inference()
 
-    recorder.stop_recording()
-    preprocessor.stop_preprocessing()
-    model.stop_inference()
-
-    thread_recorder.join()
-    thread_preprocessor.join()
-    thread_model.join()
-    thread_gui.join()
+        thread_recorder.join()
+        thread_preprocessor.join()
+        thread_model.join()
