@@ -7,4 +7,3 @@ matplotlib
 pytest
 pylint
 psutil
-tkinter
