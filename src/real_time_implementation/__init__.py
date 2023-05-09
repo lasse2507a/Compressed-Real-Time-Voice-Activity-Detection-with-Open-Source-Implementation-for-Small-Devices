@@ -12,7 +12,7 @@ from real_time_implementation.gui_color import GUIColor
 
 F_SAMPLING = 16000
 SIZE = 200
-THRESHOLD = 0.9
+THRESHOLD = 0.5
 
 
 def real_time_implementation():
