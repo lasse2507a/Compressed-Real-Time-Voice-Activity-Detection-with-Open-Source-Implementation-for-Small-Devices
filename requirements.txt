@@ -6,3 +6,5 @@ librosa
 matplotlib
 pytest
 pylint
+psutil
+tkinter

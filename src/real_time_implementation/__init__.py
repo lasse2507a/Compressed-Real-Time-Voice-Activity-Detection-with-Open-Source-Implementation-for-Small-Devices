@@ -1,3 +1,4 @@
+import os
 import threading
 from queue import Queue
 import time
@@ -11,7 +12,7 @@ from real_time_implementation.gui_plot import GUIPlot
 
 F_SAMPLING = 16000
 SIZE = 200
-THRESHOLD = 0.5
+THRESHOLD = 0.9
 
 
 def real_time_implementation():
@@ -31,14 +32,16 @@ def real_time_implementation():
     thread_preprocessor.start()
     thread_model.start()
 
+    pid = os.getpid()
+    process = psutil.Process(pid)
     usage_counter = 0
     cpu_percent = 0
     mem = 0
     try:
         while True:
             usage_counter += 1
-            cpu_percent += psutil.cpu_percent()
-            mem += psutil.virtual_memory().used/1024/1024/100
+            cpu_percent += process.cpu_percent()/100
+            mem += process.memory_info().rss/(1024*1024)/100
             if usage_counter == 100:
                 print(f"CPU usage: {cpu_percent/100:.2f}% | Memory usage: {mem:.2f} MB")
                 usage_counter = 0
