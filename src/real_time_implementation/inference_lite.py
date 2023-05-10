@@ -16,6 +16,7 @@ class RealTimeInferenceLite:
         while not self.thread_stop_event.is_set():
             self.interpreter.allocate_tensors()
             image = images_MFSC.get()
+            print("img: "len(images_MFSC.queue))
             image = np.expand_dims(np.expand_dims(image, axis=-1), axis=0)
             self.interpreter.set_tensor(self.input_details['index'], image.astype(np.float32))
             self.interpreter.invoke()

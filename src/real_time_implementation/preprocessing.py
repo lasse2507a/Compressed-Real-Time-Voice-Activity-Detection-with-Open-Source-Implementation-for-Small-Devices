@@ -10,7 +10,7 @@ class RealTimeMFSCPreprocessor:
         self.samplerate = samplerate
         self.size = size*2
         self.FFT_size = int(2**np.ceil(np.log2(self.size)))
-        self.window = np.hanning(self.size)
+        self.window = np.hanning(self.size).astype(np.float16)
         self.frames_MFSC = Queue(maxsize=40)
         self.images_MFSC = Queue()
         self.mel_size = 40
@@ -18,14 +18,15 @@ class RealTimeMFSCPreprocessor:
 
     def start_preprocessing(self, recordings):
         print("MFSC preprocessing started")
-        recording = recordings.get()
+        recording = recordings.get().astype(np.float16)
         previous_recording = recording
+        zero_padded_frame = np.zeros(self.FFT_size, dtype=np.float16)
         while not self.thread_stop_event.is_set():
-            recording = recordings.get()
+            recording = recordings.get().astype(np.float16)
+            print("rec: " + str(len(recordings.queue)))
             frame = np.concatenate((previous_recording, recording))
             previous_recording = recording
             frame = frame * self.window
-            zero_padded_frame = np.zeros(self.FFT_size)
             zero_padded_frame[:self.size] = frame
             melspectrogram = librosa.feature.melspectrogram(y=zero_padded_frame, sr=self.samplerate, window='boxcar', n_fft=self.FFT_size,
                                                                     center=False, n_mels=self.mel_size, fmin=300, fmax=8000)
@@ -33,6 +34,7 @@ class RealTimeMFSCPreprocessor:
             if self.frames_MFSC.full():
                 image_MFSC = np.concatenate(list(self.frames_MFSC.queue), axis=1)
                 self.images_MFSC.put(image_MFSC)
+                print("img: " + str(len(self.images_MFSC.queue)))
                 for _ in range(5):
                     self.frames_MFSC.get()
 
