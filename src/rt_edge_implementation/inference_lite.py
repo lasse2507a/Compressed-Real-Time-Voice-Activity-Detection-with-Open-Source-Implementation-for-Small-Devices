@@ -6,7 +6,7 @@ import tflite_runtime.interpreter as tflite
 class RealTimeInferenceLite:
     def __init__(self, model_name):
         self.thread_stop_event = threading.Event()
-        self.interpreter = tflite.Interpreter(model_path=f"models\\{model_name}")
+        self.interpreter = tflite.Interpreter(model_path=f"models/{model_name}")
         self.input_details = self.interpreter.get_input_details()[0]
         self.output_details = self.interpreter.get_output_details()[0]
 

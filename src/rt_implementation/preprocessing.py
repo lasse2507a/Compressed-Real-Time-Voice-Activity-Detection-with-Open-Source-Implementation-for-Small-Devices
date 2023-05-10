@@ -23,6 +23,7 @@ class RealTimeMFSCPreprocessor:
         zero_padded_frame = np.zeros(self.FFT_size, dtype=np.float16)
         while not self.thread_stop_event.is_set():
             recording = recordings.get().astype(np.float16)
+            print("recs: " + str(len(recordings.queue)))
             frame = np.concatenate((previous_recording, recording))
             previous_recording = recording
             frame = frame * self.window

@@ -1,13 +1,13 @@
 import os
 import threading
 from queue import Queue
-import time
 import psutil
 from rt_implementation.audio_recorder import AudioRecorder
 from rt_implementation.preprocessing import RealTimeMFSCPreprocessor
 from rt_implementation.inference_lite import RealTimeInferenceLite
 #from rt_implementation.inference import RealTimeInference
 from rt_implementation.gui_plot import GUIPlot
+
 
 F_SAMPLING = 16000
 SIZE = 200
@@ -37,7 +37,6 @@ def real_time_implementation():
     mem = 0
     try:
         while True:
-            preds.get()
             usage_counter += 1
             cpu_percent += process.cpu_percent()/100
             mem += process.memory_info().rss/(1024*1024)/100
@@ -48,7 +47,6 @@ def real_time_implementation():
                 mem = 0
 
             gui.update_color(preds)
-            time.sleep(0.01)
 
     except KeyboardInterrupt:
         recorder.stop_recording()

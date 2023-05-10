@@ -1,8 +1,7 @@
-import os
+#import os
 import threading
 from queue import Queue
-import time
-import psutil
+#import psutil
 from rt_edge_implementation.audio_recorder import AudioRecorder
 from rt_edge_implementation.preprocessing import RealTimeMFSCPreprocessor
 from rt_edge_implementation.inference_lite import RealTimeInferenceLite
@@ -28,26 +27,23 @@ def real_time_implementation():
     thread_preprocessor.start()
     thread_model.start()
 
-    pid = os.getpid()
-    process = psutil.Process(pid)
+    # pid = os.getpid()
+    # process = psutil.Process(pid)
     usage_counter = 0
-    cpu_percent = 0
-    mem = 0
+    # cpu_percent = 0
+    # mem = 0
     try:
         while True:
-            preds.get()
-            print("preds: " + str(len(preds.queue)))
             usage_counter += 1
-            cpu_percent += process.cpu_percent()/100
-            mem += process.memory_info().rss/(1024*1024)/100
-            if usage_counter == 100:
-                print(f"CPU usage: {cpu_percent/100:.2f}% | Memory usage: {mem:.2f} MB")
-                usage_counter = 0
-                cpu_percent = 0
-                mem = 0
+            # cpu_percent += process.cpu_percent()/100
+            # mem += process.memory_info().rss/(1024*1024)/100
+            # if usage_counter == 100:
+            #     print(f"CPU usage: {cpu_percent/100:.2f}% | Memory usage: {mem:.2f} MB")
+            #     usage_counter = 0
+            #     cpu_percent = 0
+            #     mem = 0
 
             #gui.update_color(preds)
-            time.sleep(0.01)
 
     except KeyboardInterrupt:
         recorder.stop_recording()
