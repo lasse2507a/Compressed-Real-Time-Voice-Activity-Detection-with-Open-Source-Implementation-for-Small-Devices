@@ -8,7 +8,7 @@ class AudioRecorder:
     def __init__(self, samplerate, size):
         self.samplerate = samplerate
         self.size = size
-        self.recordings = Queue()
+        self.recordings = Queue(maxsize=20)
         self.thread_stop_event = threading.Event()
         self.input_stream = sd.InputStream(samplerate=self.samplerate, blocksize=self.size, channels=1, dtype=np.int16)
 
