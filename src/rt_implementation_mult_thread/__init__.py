@@ -10,7 +10,7 @@ from rt_implementation_mult_thread.gui_plot import GUIPlot
 
 
 F_SAMPLING = 16000
-SIZE = 200
+SIZE = 200 #Half of window size to create 50% overlap
 THRESHOLD = 0.5
 
 

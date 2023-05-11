@@ -7,17 +7,8 @@ def precision_recall_plot(labels_list, preds_list, model_names):
     plt.figure(figsize=(8, 8))
 
     for i, (labels, preds) in enumerate(zip(labels_list, preds_list)):
-        if model_names[i] == 'WebRTC VAD':
-            precisions = []
-            recalls = []
-            for i in range(4):
-                cm = calculate_confusion_matrix(labels, preds[i])
-                precisions.append(precision(cm))
-                recalls.append(recall(cm))
-        else:
-            precisions, recalls, _ = precision_recall_curve(labels, preds)
-            pr_ap = auc(recalls, precisions)
-
+        precisions, recalls, _ = precision_recall_curve(labels, preds)
+        pr_ap = auc(recalls, precisions)
         plt.plot(recalls, precisions, label=f'{model_names[i]} (AP = {pr_ap:.4f})', linewidth=2)
 
     plt.gca().set_aspect('equal', adjustable='box')
@@ -34,17 +25,8 @@ def auc_roc_plot(labels_list, preds_list, model_names):
     plt.figure(figsize=(8,8))
 
     for i, (labels, preds) in enumerate(zip(labels_list, preds_list)):
-        if model_names[i] == 'WebRTC VAD':
-            tpr = []
-            fpr = []
-            for i in range(4):
-                cm = calculate_confusion_matrix(labels, preds[i])
-                tpr.append(recall(cm))
-                fpr.append(fp_rate(cm))
-        else:
-            fpr, tpr, _ = roc_curve(labels, preds)
-            auc_value = auc(fpr, tpr)
-
+        fpr, tpr, _ = roc_curve(labels, preds)
+        auc_value = auc(fpr, tpr)
         plt.plot(fpr, tpr, label=f'{model_names[i]} (AUC = {auc_value:.4f})', linewidth=2)
 
     plt.gca().set_aspect('equal', adjustable='box')

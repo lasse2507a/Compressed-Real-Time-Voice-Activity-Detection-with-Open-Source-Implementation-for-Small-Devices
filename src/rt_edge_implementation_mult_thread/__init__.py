@@ -7,6 +7,7 @@ from rt_edge_implementation_mult_thread.preprocessing import RealTimeMFSCPreproc
 from rt_edge_implementation_mult_thread.inference_lite import RealTimeInferenceLite
 #from rt_edge_implementation_mult_thread.gui_color import GUIColor
 
+
 F_SAMPLING = 16000
 SIZE = 200
 THRESHOLD = 0.5

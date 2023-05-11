@@ -22,7 +22,7 @@ class Preprocessor:
 
     def process(self, data_path):
         """
-        Preprocesses audio fileslocated in the given directory using multithreading.
+        Preprocesses audio files located in the given directory using multithreading.
         Args: data_path (str): Path to directory containing audio files.
         """
         print("preprocessing started")
@@ -42,7 +42,7 @@ class Preprocessor:
               data_path (str): Path to directory containing audio files.
         """
         file_name = file.replace(".wav", "")
-        j = 1
+        frame_num = 1
         frames_MFSC = Queue(maxsize=40)
         frames_MFSC.queue.clear()
         if file.endswith(".wav"):
@@ -60,8 +60,8 @@ class Preprocessor:
                 frames_MFSC.put(librosa.power_to_db(melspectrogram, ref=np.max))
                 if frames_MFSC.full():
                     image_MFSC = np.concatenate(list(frames_MFSC.queue), axis=1)
-                    np.save(f"{data_path}\\mfsc_window_{self.size}samples\\{file_name}_mfsc{j}.npy", image_MFSC)
-                    j += 1
+                    np.save(f"{data_path}\\mfsc_window_{self.size}samples\\{file_name}_mfsc{frame_num}.npy", image_MFSC)
+                    frame_num += 1
                     for _ in range(5):
                         frames_MFSC.get()
 

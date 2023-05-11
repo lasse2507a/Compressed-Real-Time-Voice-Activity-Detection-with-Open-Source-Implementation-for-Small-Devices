@@ -6,10 +6,6 @@ import scipy.io.wavfile as wavfile
 
 class DataHandler:
     def __init__(self, samplerate):
-        """
-        Initialize a DataHandler instance.
-        Args: samplerate (int): The samplerate of the audio data.
-        """
         self.samplerate = samplerate
         self.names = []
         self.start_times = []
@@ -22,7 +18,7 @@ class DataHandler:
 
     def load_csv(self, path):
         """
-        Load metadata from a CSV file.
+        Load metadata from a CSV file. The format has to be identical to data\\metadata\\ava_speech_labels_v1.csv.
         Args: path (str): The path to the CSV file containing the metadata.
         """
         with open(path, encoding = "utf-8") as csvfile:
@@ -36,7 +32,7 @@ class DataHandler:
 
     def create_data(self, size):
         """
-        Create audio clips of a given size from the input data.
+        Create all possible audio clips of a given size for each interval from the input data.
         Args: size (int): The size of the clips in samples.
         """
         for k, start_time in enumerate(self.start_times):
@@ -49,27 +45,27 @@ class DataHandler:
 
         for file in os.listdir('data\\input'):
             current_file = wavfile.read(os.path.join('data\\input', file))[1]
-            l = 0
-            for i in self.indices_correct_size:
-                if 'data\\input\\' + self.names[i] + '.wav' == os.path.join('data\\input', file):
-                    self.indices_current_file.append(i)
-            total_number_of_clips = 0
-            for j in self.indices_current_file:
-                number_of_clips = int(np.floor(((self.end_times[j] - self.start_times[j]) * self.samplerate) / size))
-                total_number_of_clips += number_of_clips
-                begin = self.start_times[j] * self.samplerate
-                for m in range(number_of_clips):
+            dest_split = 0
+            for index in self.indices_correct_size:
+                if 'data\\input\\' + self.names[index] + '.wav' == os.path.join('data\\input', file):
+                    self.indices_current_file.append(index)
+            total_num_of_clips = 0
+            for index_current_file in self.indices_current_file:
+                num_of_clips = int(np.floor(((self.end_times[index_current_file] - self.start_times[index_current_file]) * self.samplerate) / size))
+                total_num_of_clips += num_of_clips
+                begin = self.start_times[index_current_file] * self.samplerate
+                for clip_num in range(num_of_clips):
                     end = begin + size
                     clip = current_file[int(begin):int(end)]
-                    l += 1
-                    if l % 2 == 0:
-                        wavfile.write(f"data\\output\\training_clip_len_{size}samples\\{j+1},{m+1}_{self.names[j]}_{self.labels[j]}.wav",
-                                    self.samplerate, np.array(clip, dtype=np.int16))
+                    dest_split += 1
+                    if dest_split % 2 == 0:
+                        wavfile.write(f"data\\output\\training_clip_len_{size}samples\\{index_current_file+1},{clip_num+1}_{self.names[index_current_file]}_{self.labels[index_current_file]}.wav",
+                                      self.samplerate, np.array(clip, dtype=np.int16))
                     else:
-                        wavfile.write(f"data\\output\\validation_clip_len_{size}samples\\{j+1},{m+1}_{self.names[j]}_{self.labels[j]}.wav",
-                                    self.samplerate, np.array(clip, dtype=np.int16))
+                        wavfile.write(f"data\\output\\validation_clip_len_{size}samples\\{index_current_file+1},{clip_num+1}_{self.names[index_current_file]}_{self.labels[index_current_file]}.wav",
+                                      self.samplerate, np.array(clip, dtype=np.int16))
                     begin = end
-            print(os.path.join('data\\input', file) + " indicies: " + str(len(self.indices_current_file)) + " total clips: " + str(total_number_of_clips))
+            print(os.path.join('data\\input', file) + " indicies: " + str(len(self.indices_current_file)) + " total clips: " + str(total_num_of_clips))
             self.indices_current_file = []
 
 
