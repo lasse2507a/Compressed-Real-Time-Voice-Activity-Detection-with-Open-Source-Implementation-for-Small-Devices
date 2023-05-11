@@ -2,10 +2,10 @@
 import threading
 from queue import Queue
 #import psutil
-from rt_edge_implementation.audio_recorder import AudioRecorder
-from rt_edge_implementation.preprocessing import RealTimeMFSCPreprocessor
-from rt_edge_implementation.inference_lite import RealTimeInferenceLite
-#from rt_edge_implementation.gui_color import GUIColor
+from rt_edge_implementation_mult_thread.audio_recorder import AudioRecorder
+from rt_edge_implementation_mult_thread.preprocessing import RealTimeMFSCPreprocessor
+from rt_edge_implementation_mult_thread.inference_lite import RealTimeInferenceLite
+#from rt_edge_implementation_mult_thread.gui_color import GUIColor
 
 F_SAMPLING = 16000
 SIZE = 200
