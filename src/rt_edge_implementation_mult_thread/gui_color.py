@@ -11,7 +11,7 @@ class GUIColor(tk.Tk):
         self.threshold =  threshold
 
 
-    def update_color(self, preds):
+    def update_gui(self, preds):
         pred = preds.get()
 
         if pred >= self.threshold:

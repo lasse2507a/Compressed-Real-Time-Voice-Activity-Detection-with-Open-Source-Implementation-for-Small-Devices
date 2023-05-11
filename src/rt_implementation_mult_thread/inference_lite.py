@@ -5,6 +5,7 @@ import tensorflow as tf
 
 class RealTimeInferenceLite:
     def __init__(self, model_name):
+        self.model_name = model_name
         self.thread_stop_event = threading.Event()
         self.interpreter = tf.lite.Interpreter(model_path=f"models\\{model_name}")
         self.input_details = self.interpreter.get_input_details()[0]
@@ -12,7 +13,7 @@ class RealTimeInferenceLite:
 
 
     def start_inference(self, images_MFSC, preds):
-        print('lite inference started')
+        print(f'Inference with {self.model_name} started')
         while not self.thread_stop_event.is_set():
             self.interpreter.allocate_tensors()
             image = images_MFSC.get()
@@ -25,4 +26,4 @@ class RealTimeInferenceLite:
 
     def stop_inference(self):
         self.thread_stop_event.set()
-        print('lite inference stopped')
+        print(f'Inference with {self.model_name} stopped')

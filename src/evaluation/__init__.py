@@ -38,7 +38,7 @@ def calc_preds(model_name):
     elif model_name.split('.')[-1] == 'h5':
         model = tf.keras.models.load_model(f"models/{model_name}")
         preds = model.predict(x=data, verbose=1)
-        print(f'finished predictions with {model_name}')
+        print(f'Finished predictions with {model_name}')
     else:
         print(f'{model_name} wrong format')
 

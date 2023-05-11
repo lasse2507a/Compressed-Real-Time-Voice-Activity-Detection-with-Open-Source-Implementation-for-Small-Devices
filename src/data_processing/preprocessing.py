@@ -25,14 +25,14 @@ class Preprocessor:
         Preprocesses audio files located in the given directory using multithreading.
         Args: data_path (str): Path to directory containing audio files.
         """
-        print("preprocessing started")
+        print("Preprocessing started")
         os.makedirs(f"{data_path}\\mfsc_window_{self.size}samples", exist_ok = True)
 
         with ThreadPoolExecutor(max_workers=os.cpu_count()) as executor:
             for file in os.listdir(data_path):
                 if file.endswith(".wav"):
                     executor.submit(self._process_file, file, data_path)
-        print("preprocessing finished")
+        print("Preprocessing finished")
 
 
     def _process_file(self, file, data_path):

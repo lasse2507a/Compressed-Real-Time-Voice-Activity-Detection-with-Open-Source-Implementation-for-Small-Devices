@@ -17,7 +17,7 @@ def move_random_npy_files(source_dir, dest_dir, num_files):
         src_path = os.path.join(source_dir, file)
         dest_path = os.path.join(dest_dir, file)
         shutil.move(src_path, dest_path)
-    print(f"moved {num_files} .npy files from {source_dir} to {dest_dir}.")
+    print(f"Moved {num_files} .npy files from {source_dir} to {dest_dir}.")
 
 
 if __name__ == "__main__":

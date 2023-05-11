@@ -9,11 +9,13 @@ from rt_edge_implementation_mult_thread.inference_lite import RealTimeInferenceL
 
 
 F_SAMPLING = 16000
-SIZE = 200
+SIZE = 200 #Half of window size to create 50% overlap
 THRESHOLD = 0.5
 
 
 def real_time_implementation():
+    stop_event = threading.Event()
+
     recorder = AudioRecorder(F_SAMPLING, SIZE)
     preprocessor = RealTimeMFSCPreprocessor(F_SAMPLING, SIZE)
     model = RealTimeInferenceLite('cnn_model_v4_25(12,8,5).tflite')
@@ -34,7 +36,7 @@ def real_time_implementation():
     # cpu_percent = 0
     # mem = 0
     try:
-        while True:
+        while not stop_event.is_set():
             usage_counter += 1
             # cpu_percent += process.cpu_percent()/100
             # mem += process.memory_info().rss/(1024*1024)/100
@@ -47,6 +49,9 @@ def real_time_implementation():
             #gui.update_color(preds)
 
     except KeyboardInterrupt:
+        stop_event.set()
+
+    finally:
         recorder.stop_recording()
         preprocessor.stop_preprocessing()
         model.stop_inference()

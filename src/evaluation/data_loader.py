@@ -24,7 +24,7 @@ class DataLoader:
                 labels.append(label)
         data = np.array(data)
         labels = np.array(labels)
-        print("data loaded successfully from path: " + str(self.path))
+        print("Data loaded successfully from path: " + str(self.path))
         return data, labels
 
 

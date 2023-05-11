@@ -11,5 +11,6 @@ def compress_model(model_name):
 
     tf.io.write_file(f'models/{model_name}.tflite', tf_flite_model)
 
+
 if __name__ == '__main__':
     compress_model('cnn_model_v4_25(12,8,5)')

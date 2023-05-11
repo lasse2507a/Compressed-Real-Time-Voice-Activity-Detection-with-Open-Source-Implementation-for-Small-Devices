@@ -4,6 +4,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
+
 class GUIPlot(tk.Tk):
     def __init__(self, threshold):
         super().__init__()
@@ -15,14 +16,13 @@ class GUIPlot(tk.Tk):
         self.threshold =  threshold
         self.threshold_data = np.array([self.threshold for _ in range(100)])
         self.data = Queue(100)
-
         self.fig = plt.figure(figsize=(4, 4))
         self.canvas = FigureCanvasTkAgg(self.fig, master=self)
         self.canvas.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=1)
         self.ax = self.fig.add_subplot(111)
 
 
-    def update_color(self, preds):
+    def update_gui(self, preds):
         pred = preds.get()
 
         if self.data.full():

@@ -1,10 +1,13 @@
+import tensorflow as tf
 import visualkeras
-from training.architecture_models import cnn_model_original
 
 
-def visualize_model():
-    model = cnn_model_original()
-
+def visualize_model(model_name):
+    model = tf.keras.models.load_model(f'models/{model_name}')
     visualkeras.layered_view(model,
                             legend=True,
-                            to_file='model.png').show()
+                            to_file='model.png').show() # Fix scaling
+
+
+if __name__ == '__main__':
+    visualize_model('cnn_model_v4_25(12,8,5).h5')

@@ -19,7 +19,7 @@ def execute_training():
     training_data = Generator(training_data_path, batch_size)
     validation_data = Generator(validation_data_path, batch_size)
 
-    def scheduler(epoch, lr):
+    def _scheduler(epoch, lr):
         if epoch == 12:
             return lr * 0.1
         elif epoch == 20:
@@ -35,4 +35,4 @@ def execute_training():
                                                             monitor='val_binary_accuracy',
                                                             save_best_only=True,),
                          tf.keras.callbacks.TensorBoard(),
-                         tf.keras.callbacks.LearningRateScheduler(scheduler)],)
+                         tf.keras.callbacks.LearningRateScheduler(_scheduler)],)
