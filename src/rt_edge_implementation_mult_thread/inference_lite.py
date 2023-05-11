@@ -25,3 +25,4 @@ class RealTimeInferenceLite:
 
     def stop_inference(self):
         self.thread_stop_event.set()
+        print('lite inference stopped')

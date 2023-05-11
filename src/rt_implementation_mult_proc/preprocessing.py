@@ -1,18 +1,18 @@
 from queue import Queue
-import threading
+import multiprocessing as mp
 import numpy as np
 import librosa
 
 
 class RealTimeMFSCPreprocessor:
     def __init__(self, samplerate, size):
-        self.thread_stop_event = threading.Event()
+        self.stop_event = mp.Event()
         self.samplerate = samplerate
         self.size = size*2
         self.FFT_size = int(2**np.ceil(np.log2(self.size)))
         self.window = np.hanning(self.size).astype(np.float16)
         self.frames_MFSC = Queue(maxsize=40)
-        self.images_MFSC = Queue()
+        self.images_MFSC = mp.Queue()
         self.mel_size = 40
 
 
@@ -21,7 +21,7 @@ class RealTimeMFSCPreprocessor:
         recording = recordings.get().astype(np.float16)
         previous_recording = recording
         zero_padded_frame = np.zeros(self.FFT_size, dtype=np.float16)
-        while not self.thread_stop_event.is_set():
+        while not self.stop_event.is_set():
             recording = recordings.get().astype(np.float16)
             print("recs: " + str(len(recordings.queue)))
             frame = np.concatenate((previous_recording, recording))
@@ -39,5 +39,5 @@ class RealTimeMFSCPreprocessor:
 
 
     def stop_preprocessing(self):
-        self.thread_stop_event.set()
+        self.stop_event.set()
         print("MFSC preprocessing stopped")
