@@ -28,7 +28,7 @@ class GUIPlot(tk.Tk):
         if self.data.full():
             self.data.get()
             self.plot_counter +=1
-            if self.plot_counter == 5:
+            if self.plot_counter == 10:
                 self.plot_counter = 0
                 self._update_plot()
         else:
