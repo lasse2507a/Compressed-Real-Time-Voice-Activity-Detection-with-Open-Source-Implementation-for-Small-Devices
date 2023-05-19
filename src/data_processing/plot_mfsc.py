@@ -1,5 +1,4 @@
 import os
-import scipy.io.wavfile as wavfile
 import numpy as np
 import librosa
 import matplotlib.pyplot as plt
@@ -24,6 +23,22 @@ def plot_mfsc(data_path, image_destination_path):
         plt.savefig(image_destination_path + file_name)
 
 
+def plot_power_spectrum(data_path, image_destination_path):
+    for i, file in enumerate(os.listdir(data_path)):
+        if file.endswith('.wav'):
+            data, _ = librosa.load(os.path.join(data_path, file))
+            data = data[:16000]
+            power_spectrum = (np.abs(np.fft.fft(data))**2)[:int(8000)]
+            plt.figure(figsize=(7, 6))
+            plt.xlabel('Frequency [Hz]')
+            plt.ylabel('Amplitude')
+            plt.title('Power Spectrum')
+            plt.tight_layout()
+            plt.plot(np.linspace(0, 8000, 8000), power_spectrum)
+            file_name = f'{file}_power_spectrum_{i+1}.png'
+            plt.savefig(image_destination_path + file_name)
+
+
 def plot_waveform(data_path, image_destination_path):
     for i, file in enumerate(os.listdir(data_path)):
         if file.endswith('.wav'):
@@ -39,8 +54,9 @@ def plot_waveform(data_path, image_destination_path):
 
 
 if __name__ == '__main__':
-    plot_mfsc(data_path='data\\output\\preprocess_test\\mfsc_window_400samples',
-              image_destination_path='data\\output\\preprocess_test\\images2\\')
-    plot_waveform(data_path='data\\output\\preprocess_test',
-                  image_destination_path='data\\output\\preprocess_test\\images2\\')
-    
+    # plot_mfsc(data_path='data/output/preprocess_test/mfsc_window_400samples',
+    #           image_destination_path='data/output/preprocess_test/images/')
+    # plot_waveform(data_path='data/output/preprocess_test',
+    #               image_destination_path='data/output/preprocess_test/images/')
+    plot_power_spectrum(data_path='data/output/preprocess_test',
+                        image_destination_path='data/output/preprocess_test/images_no_db/')
