@@ -1,5 +1,5 @@
 # Citations
-## Repository
+### Repository
 ```
 @misc{open source VAD,
   author = {lasse2507a and lugialukas},
@@ -10,7 +10,7 @@
   howpublished = {\url{https://github.com/lasse2507a/Compressed-Real-Time-Voice-Activity-Detection-with-Open-Source-Implementation-for-Small-Devices}},
 }
 ``` 
-## Paper
+### Paper
 ```
 @article{real-time VAD,
   author = {Lasse Ryge Andersen and Lukas Juel Jacobsen},
