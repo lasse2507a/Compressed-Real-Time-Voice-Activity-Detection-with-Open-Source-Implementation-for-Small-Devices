@@ -12,7 +12,7 @@
 ``` 
 ### Paper:
 ```
-@article{real-time VAD,
+@article{open source VAD,
   author = {Lasse Ryge Andersen and Lukas Juel Jacobsen},
   title = {Compressed, Real-Time Voice Activity Detection with Open Source Implementation for Small Devices},
   year = {2023},
