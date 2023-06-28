@@ -1,24 +1,20 @@
-# P6-VAD
-## Building and using an environment for development with Conda
-### Building the environment
-Create an environment:
+# Citations
+### Repository:
 ```
-conda create --name p6-vad python=3.9
+@misc{open source VAD,
+  author = {lasse2507a and lugialukas},
+  title = {Compressed, Real-Time Voice Activity Detection with Open Source Implementation for Small Devices},
+  year = {2023},
+  publisher = {GitHub},
+  journal = {GitHub repository},
+  howpublished = {\url{https://github.com/lasse2507a/Compressed-Real-Time-Voice-Activity-Detection-with-Open-Source-Implementation-for-Small-Devices}},
+}
+``` 
+### Paper:
 ```
-Enter the environment:
-```
-conda activate p6-vad
-```
-Install the dependencies specified in the requirements.txt file:
-```
-pip install -r [PATH]\requirements.txt
-```
-### Developing in the environment
-Enter the environment:
-```
-conda activate p6-vad
-```
-Open the project folder in VS Code:
-```
-code [PATH].
-```
+@article{open source VAD,
+  author = {Lasse Ryge Andersen and Lukas Juel Jacobsen},
+  title = {Compressed, Real-Time Voice Activity Detection with Open Source Implementation for Small Devices},
+  year = {2023},
+}
+``` 
