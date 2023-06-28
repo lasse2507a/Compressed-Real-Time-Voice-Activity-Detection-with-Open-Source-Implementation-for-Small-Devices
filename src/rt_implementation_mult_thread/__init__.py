@@ -20,7 +20,7 @@ def real_time_implementation():
     recorder = AudioRecorder(F_SAMPLING, SIZE)
     preprocessor = RealTimeMFSCPreprocessor(F_SAMPLING, SIZE)
     model = RealTimeInferenceLite('cnn_model_v4_25(12,8,5).tflite')
-    #model = RealTimeInference('cnn_model_original_25(12,8,5).h5')
+    #model = RealTimeInference('cnn_model_v4_25(12,8,5).h5')
     preds = Queue()
     gui = GUIPlot(THRESHOLD)
 

@@ -11,7 +11,6 @@ def precision_recall_plot(labels_list, preds_list, model_names):
         pr_ap = auc(recalls, precisions)
         plt.plot(recalls, precisions, label=f'{model_names[i]} (AP = {pr_ap:.4f})', linewidth=2)
 
-    plt.gca().set_aspect('equal', adjustable='box')
     plt.title("Precision-Recall Curves")
     plt.xlabel("Recall")
     plt.ylabel("Precision")
@@ -29,7 +28,6 @@ def auc_roc_plot(labels_list, preds_list, model_names):
         auc_value = auc(fpr, tpr)
         plt.plot(fpr, tpr, label=f'{model_names[i]} (AUC = {auc_value:.4f})', linewidth=2)
 
-    plt.gca().set_aspect('equal', adjustable='box')
     plt.title("ROC Curves")
     plt.xlabel("FPR")
     plt.ylabel("TPR")

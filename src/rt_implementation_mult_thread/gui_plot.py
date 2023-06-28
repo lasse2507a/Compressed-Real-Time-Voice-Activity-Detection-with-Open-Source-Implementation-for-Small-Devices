@@ -28,7 +28,7 @@ class GUIPlot(tk.Tk):
         if self.data.full():
             self.data.get()
             self.plot_counter +=1
-            if self.plot_counter == 10:
+            if self.plot_counter == 5:
                 self.plot_counter = 0
                 self._update_plot()
         else:
@@ -47,4 +47,6 @@ class GUIPlot(tk.Tk):
         self.ax.plot(self.data.queue)
         self.ax.plot(self.threshold_data)
         self.ax.set_ylim(0, 1)
+        self.ax.set_xlabel("Images")
+        self.ax.set_ylabel("Prediction")
         self.canvas.draw()
